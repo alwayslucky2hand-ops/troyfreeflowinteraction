@@ -608,10 +608,12 @@
         container.appendChild(paginationDiv);
     }
 
+
     function scrollToList() {
         const section = document.getElementById('filterSection');
         if(section) {
-            window.scrollTo({ top: section.offsetTop - 20, behavior: 'smooth' });
+            // 改用 scrollIntoView，強迫瀏覽器將特定區塊滾動到畫面頂部
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }
 
