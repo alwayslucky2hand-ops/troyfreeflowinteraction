@@ -6,17 +6,17 @@
     <title>特洛伊敲碗解惑區</title>
     <style>
         /* ==========================================
-           🎨 FFS 品牌視覺系統 (已與部落格同步，移除粉紅，導入灰綠)
+           🎨 FFS 品牌視覺系統 (灰綠色與芥末暖黃)
            ========================================== */
         :root {
-            --primary-yellow: #E1B12C;     /* 主色：溫潤芥末暖黃 */
-            --primary-hover: #C89D26;      /* 懸停加深 */
-            --slate-blue: #708090;         /* 輔色：板岩藍 */
-            --accent-green: #619A86;       /* 強調色：溫暖灰綠色 */
-            --bg-pure: #FFFFFF;            /* 極簡白底 */
-            --text-dark: #333333;          /* 內文深灰 */
-            --text-muted: #64748b;         /* 次要文字 */
-            --glass-border: #cbd5e1;       /* 柔和框線，提升呼吸感 */
+            --primary-yellow: #E1B12C;     
+            --primary-hover: #C89D26;      
+            --slate-blue: #708090;         
+            --accent-green: #619A86;       
+            --bg-pure: #FFFFFF;            
+            --text-dark: #333333;          
+            --text-muted: #64748b;         
+            --glass-border: #cbd5e1;       
             --radius-soft: 12px;
             --space-xl: 40px;
         }
@@ -62,7 +62,7 @@
         }
         .search-box::placeholder { color: var(--text-muted); font-weight: normal; }
 
-        /* 🆕 新增：篩選區塊樣式 */
+        /* 篩選區塊樣式 */
         .filter-section {
             background: var(--bg-pure);
             margin-bottom: 32px; 
@@ -206,7 +206,7 @@
         .info-box ul { margin: 12px 0 0 0; padding-left: 20px; }
         .info-box li { margin-bottom: 6px; }
 
-        /* 🆕 分頁按鈕樣式 */
+        /* 分頁按鈕樣式 */
         .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 30px; flex-wrap: wrap; }
         .page-btn { 
             background: var(--bg-pure); color: var(--slate-blue); border: 1px solid var(--glass-border); 
@@ -219,6 +219,9 @@
         @media (max-width: 600px) {
             .panel { padding: 25px 20px; }
             .page-btn { width: 100%; margin-bottom: 5px; }
+            #datePicker { width: 100% !important; margin-bottom: 10px !important; }
+            #btnClearDate { width: 100% !important; }
+            .date-filter-group { flex-direction: column; align-items: stretch !important; gap: 0 !important; }
         }
     </style>
 </head>
@@ -234,8 +237,11 @@
         <div class="filter-title">討論類型</div>
         <div class="category-nav" id="type-container"></div>
         
-        <div class="filter-title" style="margin-top: 10px;">發佈月份</div>
-        <div class="category-nav" id="date-container" style="margin-bottom: 0;"></div>
+        <div class="filter-title" style="margin-top: 10px;">發佈日期</div>
+        <div class="date-filter-group" style="display: flex; gap: 10px; align-items: center; margin-bottom: 0;">
+            <input type="date" id="datePicker" class="search-box" style="width: auto; padding: 8px 16px; margin: 0;" onchange="handleDateChange()">
+            <button id="btnClearDate" onclick="clearDateFilter()" class="cat-btn" style="width: auto; padding: 8px 16px; margin: 0; background: #f1f5f9; color: var(--slate-blue);">清除篩選</button>
+        </div>
     </div>
 
     <div class="panel">
@@ -329,12 +335,12 @@
     const API_URL = 'https://script.google.com/macros/s/AKfycbzj7cO_mI_QaEAqPU8zEV8o-hKhRxbtOy3gnqbcUK9Din_EZYeK4ISlDAuPEILHwsVy6Q/exec'; 
     let allData = [];
 
-    // 🆕 分頁與過濾器狀態變數
+    // 分頁與過濾器狀態變數
     let currentSearchQuery = '';
     let currentType = '全部';
-    let currentDate = '全部';
+    let currentDate = ''; // 🆕 改為空字串，儲存 YYYY-MM-DD
     let currentPage = 1;
-    const postsPerPage = 20; // 設定每頁最多 20 則
+    const postsPerPage = 20;
 
     window.onload = loadPosts;
 
@@ -377,19 +383,12 @@
             if (data.error) throw new Error(data.error);
             allData = data;
             
-            // 顯示篩選器並執行渲染
             document.getElementById('filterSection').style.display = 'block';
-            renderFilters();
+            renderTypeFilter();
             renderPosts();
         } catch (e) {
             document.getElementById('loadingMsg').innerText = "載入失敗：" + e.message;
         }
-    }
-
-    // 🆕 渲染篩選器 (分類與月份)
-    function renderFilters() {
-        renderTypeFilter();
-        renderDateFilter();
     }
 
     function renderTypeFilter() {
@@ -403,71 +402,48 @@
             btn.innerText = opt;
             btn.onclick = () => {
                 currentType = opt;
-                currentDate = '全部'; // 切換類型時，日期重置
                 currentPage = 1;
-                renderFilters();
+                renderTypeFilter();
                 renderPosts();
             };
             container.appendChild(btn);
         });
     }
 
-    // 將時間轉為 YYYY年MM月 格式，用於月份篩選
-    function getYearMonth(dateStr) {
+    // 🆕 當使用者選擇精確日期時觸發
+    function handleDateChange() {
+        currentDate = document.getElementById('datePicker').value; // 取得 YYYY-MM-DD
+        currentPage = 1;
+        renderPosts();
+    }
+
+    // 🆕 當使用者點擊「清除日期」時觸發
+    function clearDateFilter() {
+        document.getElementById('datePicker').value = '';
+        currentDate = '';
+        currentPage = 1;
+        renderPosts();
+    }
+
+    // 🆕 輔助函式：將時間戳記轉為 YYYY-MM-DD 以便精確比對
+    function getYYYYMMDD(dateStr) {
         try {
             const d = new Date(dateStr);
-            if (isNaN(d.getTime())) return '未知日期';
-            return `${d.getFullYear()}年${d.getMonth() + 1}月`;
-        } catch(e) { return '未知日期'; }
+            if (isNaN(d.getTime())) return '';
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${d.getFullYear()}-${month}-${day}`;
+        } catch(e) { return ''; }
     }
 
-    function renderDateFilter() {
-        const container = document.getElementById('date-container');
-        container.innerHTML = '';
-        
-        // 依據當前選擇的「類型」過濾出有效的文章，來提取月份
-        let validPosts = allData;
-        if (currentType !== '全部') {
-            validPosts = validPosts.filter(p => p.postType === currentType);
-        }
-
-        let months = ['全部'];
-        validPosts.forEach(post => {
-            const ym = getYearMonth(post.timestamp);
-            if (ym !== '未知日期' && !months.includes(ym)) {
-                months.push(ym);
-            }
-        });
-
-        // 將月份排序 (最新的在前面)
-        months.sort((a, b) => {
-            if (a === '全部') return -1;
-            if (b === '全部') return 1;
-            return b.localeCompare(a); 
-        });
-
-        months.forEach(m => {
-            const btn = document.createElement('button');
-            btn.className = m === currentDate ? 'cat-btn active' : 'cat-btn';
-            btn.innerText = m;
-            btn.onclick = () => {
-                currentDate = m;
-                currentPage = 1;
-                renderDateFilter(); 
-                renderPosts();
-            };
-            container.appendChild(btn);
-        });
-    }
-
-    // 🆕 關鍵字搜尋處理
+    // 關鍵字搜尋處理
     function filterPosts() {
         currentSearchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
         currentPage = 1;
         renderPosts();
     }
 
-    // 🆕 整合搜尋、過濾與分頁的渲染邏輯
+    // 整合搜尋、過濾與分頁的渲染邏輯
     function renderPosts() {
         const container = document.getElementById('postsContainer');
         const paginationContainer = document.getElementById('pagination-container');
@@ -477,7 +453,7 @@
 
         let filtered = allData;
 
-        // 1. 執行第一層過濾 (關鍵字搜尋)
+        // 1. 第一層過濾 (關鍵字搜尋)
         if (currentSearchQuery) {
             filtered = filtered.filter(p => 
                 (p.nickname && p.nickname.toLowerCase().includes(currentSearchQuery)) || 
@@ -487,14 +463,14 @@
             );
         }
 
-        // 2. 執行第二層過濾 (討論類型)
+        // 2. 第二層過濾 (討論類型)
         if (currentType !== '全部') {
             filtered = filtered.filter(p => p.postType === currentType);
         }
 
-        // 3. 執行第三層過濾 (發佈月份)
-        if (currentDate !== '全部') {
-            filtered = filtered.filter(p => getYearMonth(p.timestamp) === currentDate);
+        // 3. 第三層過濾 (🆕 精確的 年月日 比對)
+        if (currentDate) {
+            filtered = filtered.filter(p => getYYYYMMDD(p.timestamp) === currentDate);
         }
 
         if (filtered.length === 0) {
@@ -502,7 +478,7 @@
             return;
         }
 
-        // 4. 執行分頁切片邏輯 (每頁最多 20 則)
+        // 4. 分頁切片邏輯
         const totalPages = Math.ceil(filtered.length / postsPerPage);
         const startIndex = (currentPage - 1) * postsPerPage;
         const endIndex = startIndex + postsPerPage;
@@ -582,18 +558,15 @@
             container.innerHTML += html;
         });
 
-        // 渲染分頁按鈕
         if (totalPages > 1) {
             renderPagination(totalPages, paginationContainer);
         }
     }
 
-    // 🆕 渲染分頁按鈕控制項
     function renderPagination(totalPages, container) {
         const paginationDiv = document.createElement('div');
         paginationDiv.className = 'pagination';
 
-        // 上一頁按鈕
         const prevBtn = document.createElement('button');
         prevBtn.className = 'page-btn';
         prevBtn.innerText = '上一頁';
@@ -607,7 +580,6 @@
         };
         paginationDiv.appendChild(prevBtn);
 
-        // 頁碼按鈕
         for (let i = 1; i <= totalPages; i++) {
             const pageBtn = document.createElement('button');
             pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
@@ -620,7 +592,6 @@
             paginationDiv.appendChild(pageBtn);
         }
 
-        // 下一頁按鈕
         const nextBtn = document.createElement('button');
         nextBtn.className = 'page-btn';
         nextBtn.innerText = '下一頁';
@@ -637,7 +608,6 @@
         container.appendChild(paginationDiv);
     }
 
-    // 🆕 切換分頁時的捲動輔助
     function scrollToList() {
         const section = document.getElementById('filterSection');
         if(section) {
