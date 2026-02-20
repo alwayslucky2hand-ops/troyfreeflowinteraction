@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>特洛伊敲碗解惑區</title>
     <style>
-        /* 保持您優雅的 CSS 樣式完全不變 */
+        /* 🎨 FFS 品牌視覺系統 (Brand CIS) 保持不變 */
         :root {
             --primary-yellow: #FFD700; --secondary-slate: #708090; --accent-pink: #FFC0CB; 
             --bg-pure: #FFFFFF; --text-dark: #2C3E50; --text-muted: #708090; 
@@ -20,8 +20,14 @@
         .search-box { width: 100%; padding: 16px; border: var(--border-width) solid var(--secondary-slate); border-radius: var(--radius-soft); font-size: 1rem; color: var(--text-dark); background: var(--bg-pure); transition: all 0.2s ease; }
         .search-box:focus { outline: none; border-color: var(--primary-yellow); background: #FFFAEA; }
         .search-box::placeholder { color: var(--text-muted); font-weight: normal; }
-        .panel { background: var(--bg-pure); border: var(--border-width) solid var(--secondary-slate); border-radius: var(--radius-soft); padding: 32px 24px; margin-bottom: 32px; }
+        .panel { background: var(--bg-pure); border: var(--border-width) solid var(--secondary-slate); border-radius: var(--radius-soft); padding: 32px 24px; margin-bottom: 32px; transition: all 0.3s ease;}
+        
+        /* 🌟 新增：收合標題的樣式 */
         .panel-title { margin: 0 0 24px 0; font-size: 1.3rem; border-bottom: 1px dashed var(--secondary-slate); padding-bottom: 12px; }
+        .toggle-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; transition: color 0.2s ease; margin-bottom: 0; }
+        .toggle-header:hover { color: var(--secondary-slate); }
+        .toggle-icon { font-size: 1.1rem; color: var(--primary-yellow); transition: transform 0.3s ease; }
+        
         .form-group { display: flex; flex-direction: column; margin-bottom: 24px; }
         .form-group label { font-size: 0.95rem; font-weight: bold; color: var(--secondary-slate); margin-bottom: 8px; }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px 16px; border: var(--border-width) solid var(--secondary-slate); border-radius: var(--radius-soft); font-size: 1.05rem; background: var(--bg-pure); color: var(--text-dark); font-family: 'Microsoft JhengHei', sans-serif; }
@@ -68,79 +74,84 @@
     </div>
 
     <div class="panel">
-        <h3 class="panel-title">發起新討論</h3>
+        <h3 class="panel-title toggle-header" onclick="toggleNewPostForm()" id="newPostHeader">
+            <span>發起新討論</span>
+            <span class="toggle-icon" id="toggleIcon">▼</span>
+        </h3>
         
-        <div class="form-group">
-            <label>發文類型 (必選)</label>
-            <select id="p_postType" onchange="toggleInfoBox()">
-                <option value="敲碗">🙋‍♂️ 敲碗 (開發、教學、課程需求)</option>
-                <option value="解惑">💡 解惑 (AI 使用與教學 QA)</option>
-            </select>
-            <div id="info_k" class="info-box">
-                <strong>【敲碗說明】</strong>
-                <p style="margin: 4px 0 0 0; color: var(--text-muted);">針對自身需求，邀請特洛伊幫忙開發，或提供專屬教學文章、影片與課程。</p>
-                <ul>
-                    <li><strong>初階會員 (600元/月)</strong>：解鎖部落格會員，不限量、不限次數觀閱專屬文章。</li>
-                    <li><strong>進階會員 (6000元/年)</strong>：含初階福利，再解鎖「特洛伊AI賦能學院」不限量、不限時空觀看課程影音。</li>
-                </ul>
+        <div id="newPostFormWrapper" style="display: none; padding-top: 24px;">
+            <div class="form-group">
+                <label>發文類型 (必選)</label>
+                <select id="p_postType" onchange="toggleInfoBox()">
+                    <option value="敲碗">🙋‍♂️ 敲碗 (開發、教學、課程需求)</option>
+                    <option value="解惑">💡 解惑 (AI 使用與教學 QA)</option>
+                </select>
+                <div id="info_k" class="info-box">
+                    <strong>【敲碗說明】</strong>
+                    <p style="margin: 4px 0 0 0; color: var(--text-muted);">針對自身需求，邀請特洛伊幫忙開發，或提供專屬教學文章、影片與課程。</p>
+                    <ul>
+                        <li><strong>初階會員 (600元/月)</strong>：解鎖部落格會員，不限量、不限次數觀閱專屬文章。</li>
+                        <li><strong>進階會員 (6000元/年)</strong>：含初階福利，再解鎖「特洛伊AI賦能學院」不限量、不限時空觀看課程影音。</li>
+                    </ul>
+                </div>
+                <div id="info_q" class="info-box" style="display: none;">
+                    <strong>【解惑說明】</strong>
+                    <p style="margin: 4px 0 0 0; color: var(--text-muted);">除上述敲碗需求外，關於一般 AI 使用、賦能、特洛伊教學的基本 QA 互動解答。</p>
+                </div>
             </div>
-            <div id="info_q" class="info-box" style="display: none;">
-                <strong>【解惑說明】</strong>
-                <p style="margin: 4px 0 0 0; color: var(--text-muted);">除上述敲碗需求外，關於一般 AI 使用、賦能、特洛伊教學的基本 QA 互動解答。</p>
+
+            <div class="form-group">
+                <label>暱稱 (必填)</label>
+                <input type="text" id="p_nickname" placeholder="您希望大家怎麼稱呼您？">
             </div>
-        </div>
 
-        <div class="form-group">
-            <label>暱稱 (必填)</label>
-            <input type="text" id="p_nickname" placeholder="您希望大家怎麼稱呼您？">
-        </div>
+            <div class="form-group">
+                <label>Email (必填，不公開，僅供留言通知使用)</label>
+                <input type="email" id="p_email" placeholder="例如：yourname@example.com">
+            </div>
+            
+            <div class="form-group">
+                <label>性別</label>
+                <select id="p_gender">
+                    <option value="不透露">不透露</option>
+                    <option value="男">男</option>
+                    <option value="女">女</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>職稱 (選填)</label>
+                <input type="text" id="p_job" placeholder="例如：系統工程師、創業者">
+            </div>
 
-        <div class="form-group">
-            <label>Email (必填，不公開，僅供留言通知使用)</label>
-            <input type="email" id="p_email" placeholder="例如：yourname@example.com">
-        </div>
-        
-        <div class="form-group">
-            <label>性別</label>
-            <select id="p_gender">
-                <option value="不透露">不透露</option>
-                <option value="男">男</option>
-                <option value="女">女</option>
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label>職稱 (選填)</label>
-            <input type="text" id="p_job" placeholder="例如：系統工程師、創業者">
-        </div>
+            <div class="form-group">
+                <label>年齡</label>
+                <select id="p_age">
+                    <option value="不透露">不透露</option>
+                    <option value="20歲以下">20歲以下</option>
+                    <option value="21-30歲">21-30歲</option>
+                    <option value="31-40歲">31-40歲</option>
+                    <option value="41歲以上">41歲以上</option>
+                </select>
+            </div>
 
-        <div class="form-group">
-            <label>年齡</label>
-            <select id="p_age">
-                <option value="不透露">不透露</option>
-                <option value="20歲以下">20歲以下</option>
-                <option value="21-30歲">21-30歲</option>
-                <option value="31-40歲">31-40歲</option>
-                <option value="41歲以上">41歲以上</option>
-            </select>
-        </div>
+            <div class="form-group">
+                <label>居住地 (選填)</label>
+                <input type="text" id="p_location" placeholder="例如：台北市">
+            </div>
 
-        <div class="form-group">
-            <label>居住地 (選填)</label>
-            <input type="text" id="p_location" placeholder="例如：台北市">
-        </div>
+            <div class="form-group">
+                <label>討論內容 (必填，支援外部網址自動轉連結)</label>
+                <textarea id="p_content" placeholder="請描述您遇上的痛點或想分享的資訊..."></textarea>
+            </div>
 
-        <div class="form-group">
-            <label>討論內容 (必填，支援外部網址自動轉連結)</label>
-            <textarea id="p_content" placeholder="請描述您遇上的痛點或想分享的資訊..."></textarea>
-        </div>
+            <div class="form-group">
+                <label>附加圖片或影片 (將自動建檔至您的雲端專屬資料夾)</label>
+                <input type="file" id="p_files" multiple accept="image/*,video/*">
+            </div>
 
-        <div class="form-group">
-            <label>附加圖片或影片 (將自動建檔至您的雲端專屬資料夾)</label>
-            <input type="file" id="p_files" multiple accept="image/*,video/*">
+            <button id="btnSubmitPost" onclick="submitPost()">發佈文章</button>
         </div>
-
-        <button id="btnSubmitPost" onclick="submitPost()">發佈文章</button>
     </div>
 
     <div id="loadingMsg" class="system-msg">正在與資料庫進行無縫連線中...</div>
@@ -148,11 +159,30 @@
 </div>
 
 <script>
-    // 🚨 這是你的 GAS 網址，請確認！
+    // 🚨 這是你的 GAS 網址，請確認沒有變動！
     const API_URL = 'https://script.google.com/macros/s/AKfycbzj7cO_mI_QaEAqPU8zEV8o-hKhRxbtOy3gnqbcUK9Din_EZYeK4ISlDAuPEILHwsVy6Q/exec'; 
     let allData = [];
 
     window.onload = loadPosts;
+
+    // 🌟 新增：收合/展開 發文表單的控制函數
+    function toggleNewPostForm() {
+        const wrapper = document.getElementById('newPostFormWrapper');
+        const icon = document.getElementById('toggleIcon');
+        const header = document.getElementById('newPostHeader');
+        
+        if (wrapper.style.display === 'none') {
+            wrapper.style.display = 'block';
+            icon.innerText = '▲';
+            header.style.borderBottom = '1px dashed var(--secondary-slate)';
+            header.style.paddingBottom = '12px';
+        } else {
+            wrapper.style.display = 'none';
+            icon.innerText = '▼';
+            header.style.borderBottom = 'none';
+            header.style.paddingBottom = '0';
+        }
+    }
 
     function toggleInfoBox() {
         const type = document.getElementById('p_postType').value;
@@ -202,7 +232,6 @@
                 });
             }
 
-            // 直接提取附屬在該貼文內的留言陣列 (新架構優勢)
             let repliesHtml = '';
             post.replies.forEach(r => {
                 repliesHtml += `
@@ -299,9 +328,14 @@
             
             await sendToServer(payload);
             
+            // 清空表單
             document.getElementById('p_content').value = '';
             document.getElementById('p_email').value = ''; 
             document.getElementById('p_files').value = '';
+            
+            // 🌟 發佈成功後，自動收合表單，讓畫面專注在新的文章上
+            toggleNewPostForm();
+
             await loadPosts(); 
             window.scrollTo({ top: 0, behavior: 'smooth' }); 
             
