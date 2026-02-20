@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>專業交流論壇</title>
+    <style>
+        /* NotebookLM 極簡學術風格：無動畫、無陰影、直角/微圓角、高對比 */
+        :root {
+            --bg-color: #f8f9fa;
+            --surface-color: #ffffff;
+            --border-color: #dadce0;
+            --text-main: #202124;
+            --text-secondary: #5f6368;
+            --primary-action: #1a73e8;
+            --primary-hover: #174ea6;
+        }
+        * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 20px; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        
+        /* 標題與搜尋 */
+        .header-area { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        h1 { margin: 0; font-size: 1.5rem; font-weight: 600; color: var(--text-main); }
+        .search-bar { padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 4px; width: 250px; font-size: 0.95rem; }
+        .search-bar:focus { outline: 2px solid var(--primary-action); border-color: transparent; }
+
+        /* 卡片共用樣式 (靜態) */
+        .panel { background-color: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+        
+        /* 表單樣式 */
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 12px; }
+        label { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 4px; }
+        input[type="text"], select, textarea { width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.95rem; background: #fff; }
+        textarea { resize: vertical; min-height: 80px; }
+        
+        /* 按鈕樣式 (無過渡動畫) */
+        button { background-color: var(--primary-action); color: white; border: none; padding: 8px 16px; border-radius: 4px; font-weight: 600; cursor: pointer; font-size: 0.95rem; }
+        button:hover { background-color: var(--primary-hover); }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
+        .btn-secondary { background-color: transparent; color: var(--text-secondary); border: 1px solid var(--border-color); }
+        .btn-secondary:hover { background-color: #f1f3f4; }
+
+        /* 貼文呈現 */
+        .post-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; font-size: 0.85rem; }
+        .tag { background-color: #e8eaed; color: var(--text-main); padding: 2px 8px; border-radius: 12px; }
+        .post-content { white-space: pre-wrap; font-size: 1rem; margin-bottom: 16px; }
+        .post-time { font-size: 0.8rem; color: var(--text-secondary); }
+        
+        /* 媒體呈現區 */
+        .media-container { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+        .media-container img { max-width: 100%; border: 1px solid var(--border-color); border-radius: 4px; }
+        .media-container iframe { width: 100%; height: 350px; border: 1px solid var(--border-color); border-radius: 4px; }
+
+        /* 回覆區塊 */
+        .reply-section { margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border-color); margin-left: 20px; border-left: 3px solid #e8eaed; padding-left: 16px; }
+        .reply-item { margin-bottom: 12px; background: #f8f9fa; padding: 12px; border-radius: 4px; border: 1px solid var(--border-color); }
+        .reply-form { margin-top: 10px; display: none; background: #f1f3f4; padding: 15px; border-radius: 4px; }
+
+        .system-msg { padding: 20px; text-align: center; color: var(--text-secondary); font-size: 0.95rem; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-area">
+        <h1>專業交流論壇</h1>
+        <input type="text" id="searchInput" class="search-bar" placeholder="關鍵字搜尋..." oninput="filterPosts()">
+    </div>
+
+    <div class="panel">
+        <h3 style="margin-top:0; font-size:1.1rem;">發起新討論</h3>
+        <div class="form-grid">
+            <div>
+                <label>暱稱 (必填)</label>
+                <input type="text" id="p_nickname" placeholder="輸入暱稱">
+            </div>
+            <div>
+                <label>性別</label>
+                <select id="p_gender">
+                    <option value="不透露">不透露</option>
+                    <option value="男">男</option>
+                    <option value="女">女</option>
+                </select>
+            </div>
+            <div>
+                <label>職稱</label>
+                <input type="text" id="p_job" placeholder="例如：工程師 (或不填)">
+            </div>
+            <div>
+                <label>年齡</label>
+                <select id="p_age">
+                    <option value="不透露">不透露</option>
+                    <option value="20歲以下">20歲以下</option>
+                    <option value="21-30歲">21-30歲</option>
+                    <option value="31-40歲">31-40歲</option>
+                    <option value="41歲以上">41歲以上</option>
+                </select>
+            </div>
+            <div>
+                <label>居住地</label>
+                <input type="text" id="p_location" placeholder="例如：台北市 (或不填)">
+            </div>
+        </div>
+        <div style="margin-bottom: 12px;">
+            <label>討論內容 (支援貼上外部網址)</label>
+            <textarea id="p_content" placeholder="請描述您想討論的問題或分享的資訊..."></textarea>
+        </div>
+        <div style="margin-bottom: 16px;">
+            <label>上傳圖片或影片 (單次總容量建議小於 25MB)</label>
+            <input type="file" id="p_files" multiple accept="image/*,video/*" style="font-size: 0.85rem;">
+        </div>
+        <button id="btnSubmitPost" onclick="submitPost()">發佈文章</button>
+    </div>
+
+    <div id="loadingMsg" class="system-msg">載入資料中，請稍候...</div>
+    <div id="postsContainer"></div>
+</div>
+
+<script>
+    // 🚨 請換成你剛剛建立新版本的 GAS 網址
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyU_lnLanA0H7akOYZAmotFQuB5KSifEZx0fB2VV3MpNtHewBPvSWLlKK43Od5lgzhxfQ/exec';
+    let allData = [];
+
+    window.onload = loadPosts;
+
+    async function loadPosts() {
+        try {
+            const res = await fetch(`${API_URL}?action=getPosts`);
+            const data = await res.json();
+            if (data.error) throw new Error(data.error);
+            allData = data;
+            renderPosts(allData);
+        } catch (e) {
+            document.getElementById('loadingMsg').innerText = "載入失敗：" + e.message;
+        }
+    }
+
+    // 渲染畫面邏輯 (主文與回覆分離組合)
+    function renderPosts(dataArray) {
+        const container = document.getElementById('postsContainer');
+        container.innerHTML = '';
+        document.getElementById('loadingMsg').style.display = 'none';
+
+        // 分離主文與回覆
+        const mainPosts = dataArray.filter(p => !p.parentID);
+        const replies = dataArray.filter(p => p.parentID);
+
+        if (mainPosts.length === 0) {
+            container.innerHTML = '<div class="system-msg">目前還沒有任何討論，來發第一篇文章吧！</div>';
+            return;
+        }
+
+        mainPosts.forEach(post => {
+            // 處理媒體顯示
+            let mediaHtml = '';
+            if (post.media && post.media.length > 0) {
+                post.media.forEach(m => {
+                    if (m.isAutoVideo) {
+                        mediaHtml += `<iframe src="https://drive.google.com/file/d/${m.id}/preview" allowfullscreen></iframe>`;
+                    } else {
+                        mediaHtml += `<img src="https://lh3.googleusercontent.com/d/${m.id}" alt="${m.name}">`;
+                    }
+                });
+            }
+
+            // 尋找屬於這篇貼文的回覆
+            const postReplies = replies.filter(r => r.parentID === post.postID);
+            let repliesHtml = '';
+            postReplies.forEach(r => {
+                repliesHtml += `
+                    <div class="reply-item">
+                        <div class="post-meta" style="margin-bottom:4px;">
+                            <strong>${r.nickname}</strong>
+                            <span class="tag">${r.jobTitle}</span>
+                            <span class="post-time">${formatDate(r.timestamp)}</span>
+                        </div>
+                        <div class="post-content" style="margin-bottom:0; font-size:0.95rem;">${escapeHtml(r.content)}</div>
+                    </div>
+                `;
+            });
+
+            const html = `
+                <div class="panel">
+                    <div class="post-meta">
+                        <strong>${post.nickname}</strong>
+                        <span class="tag">${post.gender}</span>
+                        <span class="tag">${post.jobTitle}</span>
+                        <span class="tag">${post.age}</span>
+                        <span class="tag">${post.location}</span>
+                        <span class="post-time">${formatDate(post.timestamp)}</span>
+                    </div>
+                    <div class="post-content">${linkify(escapeHtml(post.content))}</div>
+                    ${mediaHtml ? `<div class="media-container">${mediaHtml}</div>` : ''}
+                    
+                    <div>
+                        <button class="btn-secondary" onclick="toggleReplyForm('${post.postID}')">回覆討論 (${postReplies.length})</button>
+                    </div>
+
+                    <div class="reply-section">
+                        ${repliesHtml}
+                        
+                        <div id="reply-form-${post.postID}" class="reply-form form-grid" style="display:block; margin-top:15px; border-top:1px solid #ccc; padding-top:15px;">
+                            <input type="text" id="r_nickname_${post.postID}" placeholder="您的暱稱 (必填)">
+                            <input type="text" id="r_job_${post.postID}" placeholder="職稱 (選填)">
+                            <textarea id="r_content_${post.postID}" placeholder="寫下您的回覆..." style="grid-column: 1 / -1;"></textarea>
+                            <button onclick="submitReply('${post.postID}')" style="grid-column: 1 / -1;">送出回覆</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += html;
+            // 預設隱藏回覆表單，保持畫面乾淨
+            document.getElementById(`reply-form-${post.postID}`).style.display = 'none';
+        });
+    }
+
+    function toggleReplyForm(id) {
+        const form = document.getElementById(`reply-form-${id}`);
+        form.style.display = form.style.display === 'none' ? 'grid' : 'none';
+    }
+
+    // 發佈主文
+    async function submitPost() {
+        const nickname = document.getElementById('p_nickname').value.trim();
+        const content = document.getElementById('p_content').value.trim();
+        const fileInput = document.getElementById('p_files');
+        
+        if (!nickname || !content) return alert("暱稱與內容為必填！");
+        
+        const btn = document.getElementById('btnSubmitPost');
+        btn.innerText = "上傳處理中...";
+        btn.disabled = true;
+
+        try {
+            const filesData = await processFiles(fileInput.files);
+            
+            const payload = {
+                action: 'addPost',
+                payload: {
+                    nickname: nickname,
+                    gender: document.getElementById('p_gender').value,
+                    jobTitle: document.getElementById('p_job').value || '不透露',
+                    age: document.getElementById('p_age').value,
+                    location: document.getElementById('p_location').value || '不透露',
+                    content: content,
+                    files: filesData
+                }
+            };
+            await sendToServer(payload);
+            alert("發佈成功！");
+            location.reload();
+        } catch (e) {
+            alert("發生錯誤：" + e);
+            btn.innerText = "發佈文章";
+            btn.disabled = false;
+        }
+    }
+
+    // 發佈回覆
+    async function submitReply(parentID) {
+        const nickname = document.getElementById(`r_nickname_${parentID}`).value.trim();
+        const content = document.getElementById(`r_content_${parentID}`).value.trim();
+        const job = document.getElementById(`r_job_${parentID}`).value.trim() || '不透露';
+        
+        if (!nickname || !content) return alert("暱稱與回覆內容為必填！");
+        
+        const payload = {
+            action: 'addPost',
+            payload: {
+                parentID: parentID,
+                nickname: nickname,
+                jobTitle: job,
+                content: content,
+                // 回覆暫不開放傳圖，保持輕量
+                files: []
+            }
+        };
+        
+        try {
+            await sendToServer(payload);
+            alert("回覆成功！");
+            location.reload();
+        } catch (e) {
+            alert("回覆失敗：" + e);
+        }
+    }
+
+    // 將檔案轉換為 Base64 (GAS 必需)
+    async function processFiles(files) {
+        let result = [];
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const base64 = await new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.readAsDataURL(file);
+            });
+            result.push({ name: file.name, mimeType: file.type, base64: base64 });
+        }
+        return result;
+    }
+
+    // 負責與 GAS 溝通
+    async function sendToServer(data) {
+        const res = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        if (result.error) throw new Error(result.error);
+        return result;
+    }
+
+    // 關鍵字搜尋過濾 (比對暱稱、內容)
+    function filterPosts() {
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        if (!query) return renderPosts(allData);
+        
+        const filtered = allData.filter(p => 
+            (p.nickname && p.nickname.toLowerCase().includes(query)) || 
+            (p.content && p.content.toLowerCase().includes(query)) ||
+            (p.jobTitle && p.jobTitle.toLowerCase().includes(query))
+        );
+        renderPosts(filtered);
+    }
+
+    // 工具函式：防 XSS 攻擊與網址自動轉換連結
+    function escapeHtml(text) { return text.replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+    function linkify(text) {
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        return text.replace(urlRegex, function(url) {
+            return `<a href="${url}" target="_blank" style="color:#1a73e8;">${url}</a>`;
+        });
+    }
+    function formatDate(dateStr) {
+        try { const d = new Date(dateStr); return `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}`; } catch(e){ return dateStr; }
+    }
+</script>
+
+</body>
+</html>
