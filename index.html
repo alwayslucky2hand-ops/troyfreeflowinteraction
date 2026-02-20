@@ -12,7 +12,7 @@
             --primary-yellow: #E1B12C;     /* 主色：溫潤芥末暖黃 */
             --primary-hover: #C89D26;      /* 懸停加深 */
             --slate-blue: #708090;         /* 輔色：板岩藍 */
-            --accent-green: #619A86;       /* 強調色：溫暖灰綠色 (取代脂粉紅) */
+            --accent-green: #619A86;       /* 強調色：溫暖灰綠色 */
             --bg-pure: #FFFFFF;            /* 極簡白底 */
             --text-dark: #333333;          /* 內文深灰 */
             --text-muted: #64748b;         /* 次要文字 */
@@ -37,13 +37,13 @@
         h1, h2, h3, strong { font-weight: bold; color: var(--slate-blue); }
         
         .header { 
-            margin-bottom: var(--space-xl); 
-            padding-bottom: 20px; 
+            margin-bottom: 24px; 
+            padding-bottom: 10px; 
             text-align: center; 
         }
         .header h1 { margin: 0 0 20px 0; font-size: 1.8rem; letter-spacing: 0.05em; }
         
-        /* 搜尋框：柔和框線與光暈特效 */
+        /* 搜尋框 */
         .search-box { 
             width: 100%; 
             padding: 16px 20px; 
@@ -61,8 +61,41 @@
             box-shadow: 0 0 0 3px rgba(225, 177, 44, 0.2); 
         }
         .search-box::placeholder { color: var(--text-muted); font-weight: normal; }
+
+        /* 🆕 新增：篩選區塊樣式 */
+        .filter-section {
+            background: var(--bg-pure);
+            margin-bottom: 32px; 
+            padding: 24px; 
+            border-radius: var(--radius-soft); 
+            border: 1px solid var(--glass-border);
+        }
+        .filter-title {
+            margin-bottom: 12px; 
+            font-weight: bold; 
+            color: var(--slate-blue); 
+            font-size: 0.9em;
+            letter-spacing: 0.05em;
+        }
+        .category-nav { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .cat-btn { 
+            background: #f8fafc; 
+            color: var(--slate-blue); 
+            padding: 8px 18px; 
+            border-radius: 30px; 
+            border: 1px solid var(--glass-border); 
+            font-size: 0.95em; 
+            font-weight: normal;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .cat-btn.active { 
+            background: var(--slate-blue); 
+            color: #ffffff; 
+            border-color: var(--slate-blue);
+        }
         
-        /* 區塊面板：大量留白、細緻框線 */
+        /* 區塊面板 */
         .panel { 
             background: var(--bg-pure); 
             border: 1px solid var(--glass-border); 
@@ -115,7 +148,6 @@
         button:hover { background: var(--primary-hover); }
         button:disabled { background: #f1f5f9; color: var(--text-muted); cursor: not-allowed; }
         
-        /* 回覆按鈕：懸停時展現灰綠色 */
         button.btn-reply { 
             background: transparent; 
             color: var(--slate-blue); 
@@ -138,7 +170,6 @@
         .post-time { color: var(--slate-blue); font-size: 0.85rem; }
         
         .badges { display: flex; flex-wrap: wrap; gap: 8px; }
-        /* 預設標籤改為灰綠色 */
         .badge { background: var(--accent-green); border: none; color: #ffffff; padding: 4px 12px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; }
         .badge.job { background: var(--primary-yellow); color: #ffffff; }
         .badge.type-tag { background: var(--slate-blue); color: #FFF; }
@@ -175,8 +206,19 @@
         .info-box ul { margin: 12px 0 0 0; padding-left: 20px; }
         .info-box li { margin-bottom: 6px; }
 
+        /* 🆕 分頁按鈕樣式 */
+        .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 30px; flex-wrap: wrap; }
+        .page-btn { 
+            background: var(--bg-pure); color: var(--slate-blue); border: 1px solid var(--glass-border); 
+            padding: 8px 16px; border-radius: 6px; font-size: 0.9em; font-weight: normal; 
+            cursor: pointer; transition: all 0.2s ease; width: auto;
+        }
+        .page-btn.active { background: var(--slate-blue); color: #ffffff; border-color: var(--slate-blue); }
+        .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
         @media (max-width: 600px) {
             .panel { padding: 25px 20px; }
+            .page-btn { width: 100%; margin-bottom: 5px; }
         }
     </style>
 </head>
@@ -185,7 +227,15 @@
 <div class="container">
     <div class="header">
         <h1>特洛伊敲碗解惑區</h1>
-        <input type="text" id="searchInput" class="search-box" placeholder="輸入關鍵字搜尋討論與問題..." oninput="filterPosts()">
+        <input type="text" id="searchInput" class="search-box" placeholder="🔍 輸入關鍵字搜尋討論與問題..." oninput="filterPosts()">
+    </div>
+
+    <div class="filter-section" id="filterSection" style="display: none;">
+        <div class="filter-title">討論類型</div>
+        <div class="category-nav" id="type-container"></div>
+        
+        <div class="filter-title" style="margin-top: 10px;">發佈月份</div>
+        <div class="category-nav" id="date-container" style="margin-bottom: 0;"></div>
     </div>
 
     <div class="panel">
@@ -271,12 +321,20 @@
 
     <div id="loadingMsg" class="system-msg">正在與資料庫進行無縫連線中...</div>
     <div id="postsContainer"></div>
+    <div id="pagination-container"></div>
 </div>
 
 <script>
     // 🚨 這是你的 GAS 網址，請確認沒有變動！
     const API_URL = 'https://script.google.com/macros/s/AKfycbzj7cO_mI_QaEAqPU8zEV8o-hKhRxbtOy3gnqbcUK9Din_EZYeK4ISlDAuPEILHwsVy6Q/exec'; 
     let allData = [];
+
+    // 🆕 分頁與過濾器狀態變數
+    let currentSearchQuery = '';
+    let currentType = '全部';
+    let currentDate = '全部';
+    let currentPage = 1;
+    const postsPerPage = 20; // 設定每頁最多 20 則
 
     window.onload = loadPosts;
 
@@ -318,23 +376,140 @@
             
             if (data.error) throw new Error(data.error);
             allData = data;
-            renderPosts(allData);
+            
+            // 顯示篩選器並執行渲染
+            document.getElementById('filterSection').style.display = 'block';
+            renderFilters();
+            renderPosts();
         } catch (e) {
             document.getElementById('loadingMsg').innerText = "載入失敗：" + e.message;
         }
     }
 
-    function renderPosts(dataArray) {
-        const container = document.getElementById('postsContainer');
+    // 🆕 渲染篩選器 (分類與月份)
+    function renderFilters() {
+        renderTypeFilter();
+        renderDateFilter();
+    }
+
+    function renderTypeFilter() {
+        const container = document.getElementById('type-container');
         container.innerHTML = '';
+        const options = ['全部', '解惑', '敲碗'];
+        
+        options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = opt === currentType ? 'cat-btn active' : 'cat-btn';
+            btn.innerText = opt;
+            btn.onclick = () => {
+                currentType = opt;
+                currentDate = '全部'; // 切換類型時，日期重置
+                currentPage = 1;
+                renderFilters();
+                renderPosts();
+            };
+            container.appendChild(btn);
+        });
+    }
+
+    // 將時間轉為 YYYY年MM月 格式，用於月份篩選
+    function getYearMonth(dateStr) {
+        try {
+            const d = new Date(dateStr);
+            if (isNaN(d.getTime())) return '未知日期';
+            return `${d.getFullYear()}年${d.getMonth() + 1}月`;
+        } catch(e) { return '未知日期'; }
+    }
+
+    function renderDateFilter() {
+        const container = document.getElementById('date-container');
+        container.innerHTML = '';
+        
+        // 依據當前選擇的「類型」過濾出有效的文章，來提取月份
+        let validPosts = allData;
+        if (currentType !== '全部') {
+            validPosts = validPosts.filter(p => p.postType === currentType);
+        }
+
+        let months = ['全部'];
+        validPosts.forEach(post => {
+            const ym = getYearMonth(post.timestamp);
+            if (ym !== '未知日期' && !months.includes(ym)) {
+                months.push(ym);
+            }
+        });
+
+        // 將月份排序 (最新的在前面)
+        months.sort((a, b) => {
+            if (a === '全部') return -1;
+            if (b === '全部') return 1;
+            return b.localeCompare(a); 
+        });
+
+        months.forEach(m => {
+            const btn = document.createElement('button');
+            btn.className = m === currentDate ? 'cat-btn active' : 'cat-btn';
+            btn.innerText = m;
+            btn.onclick = () => {
+                currentDate = m;
+                currentPage = 1;
+                renderDateFilter(); 
+                renderPosts();
+            };
+            container.appendChild(btn);
+        });
+    }
+
+    // 🆕 關鍵字搜尋處理
+    function filterPosts() {
+        currentSearchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
+        currentPage = 1;
+        renderPosts();
+    }
+
+    // 🆕 整合搜尋、過濾與分頁的渲染邏輯
+    function renderPosts() {
+        const container = document.getElementById('postsContainer');
+        const paginationContainer = document.getElementById('pagination-container');
+        container.innerHTML = '';
+        paginationContainer.innerHTML = '';
         document.getElementById('loadingMsg').style.display = 'none';
 
-        if (dataArray.length === 0) {
-            container.innerHTML = '<div class="system-msg">目前尚無討論，成為第一位發聲的人吧！</div>';
+        let filtered = allData;
+
+        // 1. 執行第一層過濾 (關鍵字搜尋)
+        if (currentSearchQuery) {
+            filtered = filtered.filter(p => 
+                (p.nickname && p.nickname.toLowerCase().includes(currentSearchQuery)) || 
+                (p.content && p.content.toLowerCase().includes(currentSearchQuery)) ||
+                (p.jobTitle && p.jobTitle.toLowerCase().includes(currentSearchQuery)) ||
+                (p.postType && p.postType.toLowerCase().includes(currentSearchQuery))
+            );
+        }
+
+        // 2. 執行第二層過濾 (討論類型)
+        if (currentType !== '全部') {
+            filtered = filtered.filter(p => p.postType === currentType);
+        }
+
+        // 3. 執行第三層過濾 (發佈月份)
+        if (currentDate !== '全部') {
+            filtered = filtered.filter(p => getYearMonth(p.timestamp) === currentDate);
+        }
+
+        if (filtered.length === 0) {
+            container.innerHTML = '<div class="system-msg">這個條件下目前還沒有討論喔！</div>';
             return;
         }
 
-        dataArray.forEach(post => {
+        // 4. 執行分頁切片邏輯 (每頁最多 20 則)
+        const totalPages = Math.ceil(filtered.length / postsPerPage);
+        const startIndex = (currentPage - 1) * postsPerPage;
+        const endIndex = startIndex + postsPerPage;
+        const postsToShow = filtered.slice(startIndex, endIndex);
+
+        // 渲染切片後的文章
+        postsToShow.forEach(post => {
             let mediaHtml = '';
             if (post.media && post.media.length > 0) {
                 post.media.forEach(m => {
@@ -406,7 +581,73 @@
             `;
             container.innerHTML += html;
         });
+
+        // 渲染分頁按鈕
+        if (totalPages > 1) {
+            renderPagination(totalPages, paginationContainer);
+        }
     }
+
+    // 🆕 渲染分頁按鈕控制項
+    function renderPagination(totalPages, container) {
+        const paginationDiv = document.createElement('div');
+        paginationDiv.className = 'pagination';
+
+        // 上一頁按鈕
+        const prevBtn = document.createElement('button');
+        prevBtn.className = 'page-btn';
+        prevBtn.innerText = '上一頁';
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.onclick = () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderPosts();
+                scrollToList();
+            }
+        };
+        paginationDiv.appendChild(prevBtn);
+
+        // 頁碼按鈕
+        for (let i = 1; i <= totalPages; i++) {
+            const pageBtn = document.createElement('button');
+            pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+            pageBtn.innerText = i;
+            pageBtn.onclick = () => {
+                currentPage = i;
+                renderPosts();
+                scrollToList();
+            };
+            paginationDiv.appendChild(pageBtn);
+        }
+
+        // 下一頁按鈕
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'page-btn';
+        nextBtn.innerText = '下一頁';
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.onclick = () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderPosts();
+                scrollToList();
+            }
+        };
+        paginationDiv.appendChild(nextBtn);
+
+        container.appendChild(paginationDiv);
+    }
+
+    // 🆕 切換分頁時的捲動輔助
+    function scrollToList() {
+        const section = document.getElementById('filterSection');
+        if(section) {
+            window.scrollTo({ top: section.offsetTop - 20, behavior: 'smooth' });
+        }
+    }
+
+    // --------------------------------------------------------
+    // 以下為完全保留之表單處理與 API 邏輯
+    // --------------------------------------------------------
 
     function toggleReplyForm(id) {
         const form = document.getElementById(`reply-form-${id}`);
@@ -442,12 +683,10 @@
             
             await sendToServer(payload);
             
-            // 清空表單
             document.getElementById('p_content').value = '';
             document.getElementById('p_email').value = ''; 
             document.getElementById('p_files').value = '';
             
-            // 發佈成功後，自動收合表單，讓畫面專注在新的文章上
             toggleNewPostForm();
 
             await loadPosts(); 
@@ -510,19 +749,6 @@
         const result = await res.json();
         if (result.error) throw new Error(result.error);
         return result;
-    }
-
-    function filterPosts() {
-        const query = document.getElementById('searchInput').value.toLowerCase();
-        if (!query) return renderPosts(allData);
-        
-        const filtered = allData.filter(p => 
-            (p.nickname && p.nickname.toLowerCase().includes(query)) || 
-            (p.content && p.content.toLowerCase().includes(query)) ||
-            (p.jobTitle && p.jobTitle.toLowerCase().includes(query)) ||
-            (p.postType && p.postType.toLowerCase().includes(query))
-        );
-        renderPosts(filtered);
     }
 
     function escapeHtml(text) { return text.replace(/</g, "<").replace(/>/g, ">"); }
