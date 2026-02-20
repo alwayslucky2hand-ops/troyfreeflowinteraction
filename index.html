@@ -3,173 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FFS 專屬交流論壇</title>
+    <title>特洛伊敲碗解惑區</title>
     <style>
-        /* ==========================================
-           🎨 FFS 品牌視覺系統 (Brand CIS)
-           大面積留白 / 微軟正黑體 / 扁平手繪質感 / 溫暖色調
-           ========================================== */
+        /* 保持您優雅的 CSS 樣式完全不變 */
         :root {
-            /* 核心三原色 */
-            --primary-yellow: #FFD700; /* 暖鵝黃：溫暖、行動力、希望 */
-            --secondary-slate: #708090; /* 板岩藍：專業、沈穩、質感邊框 */
-            --accent-pink: #FFC0CB; /* 胭脂粉：強調、標籤、溫度 */
-            
-            /* 文字與背景設定 (維持 60% 留白呼吸感) */
-            --bg-pure: #FFFFFF;
-            --text-dark: #2C3E50; /* 加深的板岩色，確保內文閱讀舒適度 */
-            --text-muted: #708090; /* 輔助文字 */
-            
-            /* 幾何與扁平手繪感設定 */
-            --border-width: 2px; /* 粗邊框創造插畫扁平感 */
-            --radius-soft: 12px; /* 溫潤的圓角 */
-            --space-xl: 40px; /* 大留白 */
+            --primary-yellow: #FFD700; --secondary-slate: #708090; --accent-pink: #FFC0CB; 
+            --bg-pure: #FFFFFF; --text-dark: #2C3E50; --text-muted: #708090; 
+            --border-width: 2px; --radius-soft: 12px; --space-xl: 40px; 
         }
-        
         *, *::before, *::after { box-sizing: border-box; }
-        
-        /* 強制套用微軟正黑體 */
-        body { 
-            font-family: 'Microsoft JhengHei', '微軟正黑體', sans-serif; 
-            background: var(--bg-pure); 
-            color: var(--text-dark); 
-            margin: 0; 
-            padding: var(--space-xl) 20px; 
-            line-height: 1.8; 
-            -webkit-font-smoothing: antialiased; 
-        }
-        
-        /* 置中與黃金比例寬度 */
+        body { font-family: 'Microsoft JhengHei', '微軟正黑體', sans-serif; background: var(--bg-pure); color: var(--text-dark); margin: 0; padding: var(--space-xl) 20px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
         .container { max-width: 640px; margin: 0 auto; padding-bottom: 60px; }
-        
-        /* 大標題規範：微軟正黑粗體 */
         h1, h2, h3, strong { font-weight: bold; color: var(--text-dark); }
-        
-        .header { 
-            margin-bottom: var(--space-xl); 
-            padding-bottom: 20px; 
-            border-bottom: var(--border-width) solid var(--secondary-slate); 
-            text-align: center;
-        }
+        .header { margin-bottom: var(--space-xl); padding-bottom: 20px; border-bottom: var(--border-width) solid var(--secondary-slate); text-align: center; }
         .header h1 { margin: 0 0 16px 0; font-size: 1.8rem; letter-spacing: 0.05em; }
-        
-        /* 扁平手繪感搜尋框 */
-        .search-box { 
-            width: 100%; padding: 16px; 
-            border: var(--border-width) solid var(--secondary-slate); 
-            border-radius: var(--radius-soft); font-size: 1rem; 
-            color: var(--text-dark); background: var(--bg-pure);
-            transition: all 0.2s ease;
-        }
-        .search-box:focus { 
-            outline: none; 
-            border-color: var(--primary-yellow); 
-            background: #FFFAEA; /* 聚焦時淡淡的暖黃底 */
-        }
+        .search-box { width: 100%; padding: 16px; border: var(--border-width) solid var(--secondary-slate); border-radius: var(--radius-soft); font-size: 1rem; color: var(--text-dark); background: var(--bg-pure); transition: all 0.2s ease; }
+        .search-box:focus { outline: none; border-color: var(--primary-yellow); background: #FFFAEA; }
         .search-box::placeholder { color: var(--text-muted); font-weight: normal; }
-
-        /* 卡片設計：無陰影、粗邊框、極致留白 */
-        .panel { 
-            background: var(--bg-pure); 
-            border: var(--border-width) solid var(--secondary-slate); 
-            border-radius: var(--radius-soft); 
-            padding: 32px 24px; 
-            margin-bottom: 32px; 
-        }
+        .panel { background: var(--bg-pure); border: var(--border-width) solid var(--secondary-slate); border-radius: var(--radius-soft); padding: 32px 24px; margin-bottom: 32px; }
         .panel-title { margin: 0 0 24px 0; font-size: 1.3rem; border-bottom: 1px dashed var(--secondary-slate); padding-bottom: 12px; }
-        
-        /* 嚴格的絕對垂直表單 (絕不並排) */
         .form-group { display: flex; flex-direction: column; margin-bottom: 24px; }
         .form-group label { font-size: 0.95rem; font-weight: bold; color: var(--secondary-slate); margin-bottom: 8px; }
-        
-        .form-group input, .form-group select, .form-group textarea { 
-            width: 100%; padding: 14px 16px; 
-            border: var(--border-width) solid var(--secondary-slate); 
-            border-radius: var(--radius-soft); font-size: 1.05rem; 
-            background: var(--bg-pure); color: var(--text-dark);
-            font-family: 'Microsoft JhengHei', sans-serif;
-        }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            outline: none; border-color: var(--primary-yellow); background: #FFFAEA;
-        }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px 16px; border: var(--border-width) solid var(--secondary-slate); border-radius: var(--radius-soft); font-size: 1.05rem; background: var(--bg-pure); color: var(--text-dark); font-family: 'Microsoft JhengHei', sans-serif; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary-yellow); background: #FFFAEA; }
         .form-group textarea { min-height: 140px; resize: vertical; }
-
-        /* 行動呼籲按鈕 (溫暖黃色 + 板岩藍文字框) */
-        button { 
-            background: var(--primary-yellow); 
-            color: var(--text-dark); 
-            border: var(--border-width) solid var(--secondary-slate); 
-            padding: 16px 24px; 
-            border-radius: var(--radius-soft); 
-            font-weight: bold; font-size: 1.1rem; 
-            cursor: pointer; width: 100%; 
-            font-family: 'Microsoft JhengHei', sans-serif;
-        }
+        button { background: var(--primary-yellow); color: var(--text-dark); border: var(--border-width) solid var(--secondary-slate); padding: 16px 24px; border-radius: var(--radius-soft); font-weight: bold; font-size: 1.1rem; cursor: pointer; width: 100%; font-family: 'Microsoft JhengHei', sans-serif; }
         button:hover { background: #F0CA00; }
         button:disabled { background: #F5F5F5; color: var(--text-muted); cursor: not-allowed; border-color: #DDE1E6; }
-        
-        /* 回覆按鈕：次要行動 */
-        button.btn-reply { 
-            background: transparent; color: var(--secondary-slate); 
-            margin-top: 20px; padding: 12px; font-size: 0.95rem;
-            border: var(--border-width) dashed var(--secondary-slate);
-        }
+        button.btn-reply { background: transparent; color: var(--secondary-slate); margin-top: 20px; padding: 12px; font-size: 0.95rem; border: var(--border-width) dashed var(--secondary-slate); }
         button.btn-reply:hover { background: var(--accent-pink); color: var(--text-dark); border-style: solid; border-color: var(--text-dark); }
-
-        /* 貼文呈現區 */
         .post-header { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
         .post-author-row { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
         .post-author { font-size: 1.2rem; font-weight: bold; color: var(--text-dark); }
         .post-time { color: var(--secondary-slate); font-size: 0.85rem; }
-        
-        /* 胭脂粉與鵝黃色標籤 */
         .badges { display: flex; flex-wrap: wrap; gap: 8px; }
-        .badge { 
-            background: var(--accent-pink); 
-            border: 1px solid var(--secondary-slate); 
-            color: var(--text-dark); 
-            padding: 4px 10px; 
-            border-radius: 20px; 
-            font-weight: bold; font-size: 0.8rem; 
-        }
+        .badge { background: var(--accent-pink); border: 1px solid var(--secondary-slate); color: var(--text-dark); padding: 4px 10px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; }
         .badge.job { background: var(--primary-yellow); }
-        
+        .badge.type-tag { background: var(--text-dark); color: #FFF; }
         .post-content { font-size: 1.1rem; white-space: pre-wrap; margin-bottom: 24px; word-break: break-word; color: var(--text-dark); }
         .post-content a { color: var(--secondary-slate); text-decoration: underline; font-weight: bold; }
-        
-        /* 媒體區塊 */
         .media-box { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
         .media-box img { max-width: 100%; border-radius: var(--radius-soft); border: var(--border-width) solid var(--secondary-slate); }
         .media-box iframe { width: 100%; height: 280px; border-radius: var(--radius-soft); border: var(--border-width) solid var(--secondary-slate); background: var(--bg-pure); }
-
-        /* 回覆區塊：左側粗線條建立層次 */
         .replies-wrapper { margin-top: 24px; padding-top: 10px; }
-        .reply-item { 
-            border-left: 4px solid var(--primary-yellow); 
-            padding: 0 0 16px 16px; 
-            margin-bottom: 20px; 
-        }
+        .reply-item { border-left: 4px solid var(--primary-yellow); padding: 0 0 16px 16px; margin-bottom: 20px; }
         .reply-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
         .reply-name { font-weight: bold; color: var(--text-dark); }
         .reply-time { font-size: 0.8rem; color: var(--secondary-slate); }
         .reply-content { font-size: 1rem; margin: 0; }
-
         .system-msg { text-align: center; color: var(--secondary-slate); padding: 40px 20px; font-size: 1.1rem; font-weight: bold; }
-
-        /* 檔案上傳按鈕美化 */
         input[type="file"] { border: none !important; padding: 0 !important; background: transparent !important; }
-        input[type="file"]::file-selector-button {
-            background: var(--secondary-slate); color: white; border: none;
-            padding: 8px 16px; border-radius: 8px; font-family: 'Microsoft JhengHei';
-            cursor: pointer; margin-right: 15px; font-weight: bold;
-        }
+        input[type="file"]::file-selector-button { background: var(--secondary-slate); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-family: 'Microsoft JhengHei'; cursor: pointer; margin-right: 15px; font-weight: bold; }
+        .info-box { font-size: 0.9rem; color: var(--text-dark); margin-top: 12px; background: #f8f9fa; padding: 16px; border-radius: var(--radius-soft); border: 1px dashed var(--secondary-slate); }
+        .info-box ul { margin: 8px 0 0 0; padding-left: 20px; }
+        .info-box li { margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h1>FFS 賦能實戰群</h1>
+        <h1>特洛伊敲碗解惑區</h1>
         <input type="text" id="searchInput" class="search-box" placeholder="輸入關鍵字搜尋討論與問題..." oninput="filterPosts()">
     </div>
 
@@ -177,8 +71,33 @@
         <h3 class="panel-title">發起新討論</h3>
         
         <div class="form-group">
+            <label>發文類型 (必選)</label>
+            <select id="p_postType" onchange="toggleInfoBox()">
+                <option value="敲碗">🙋‍♂️ 敲碗 (開發、教學、課程需求)</option>
+                <option value="解惑">💡 解惑 (AI 使用與教學 QA)</option>
+            </select>
+            <div id="info_k" class="info-box">
+                <strong>【敲碗說明】</strong>
+                <p style="margin: 4px 0 0 0; color: var(--text-muted);">針對自身需求，邀請特洛伊幫忙開發，或提供專屬教學文章、影片與課程。</p>
+                <ul>
+                    <li><strong>初階會員 (600元/月)</strong>：解鎖部落格會員，不限量、不限次數觀閱專屬文章。</li>
+                    <li><strong>進階會員 (6000元/年)</strong>：含初階福利，再解鎖「特洛伊AI賦能學院」不限量、不限時空觀看課程影音。</li>
+                </ul>
+            </div>
+            <div id="info_q" class="info-box" style="display: none;">
+                <strong>【解惑說明】</strong>
+                <p style="margin: 4px 0 0 0; color: var(--text-muted);">除上述敲碗需求外，關於一般 AI 使用、賦能、特洛伊教學的基本 QA 互動解答。</p>
+            </div>
+        </div>
+
+        <div class="form-group">
             <label>暱稱 (必填)</label>
             <input type="text" id="p_nickname" placeholder="您希望大家怎麼稱呼您？">
+        </div>
+
+        <div class="form-group">
+            <label>Email (必填，不公開，僅供留言通知使用)</label>
+            <input type="email" id="p_email" placeholder="例如：yourname@example.com">
         </div>
         
         <div class="form-group">
@@ -229,11 +148,22 @@
 </div>
 
 <script>
-    // 🚨 這是你最新的 GAS 網址，請確認！
-    const API_URL = 'https://script.google.com/macros/s/AKfycby3C6WsCw87XDBcHqX3NpOkK18fPDFVfTGbui1R539MYtzmUpCg_o4MxfFwmItq_TtA4w/exec'; 
+    // 🚨 這是你的 GAS 網址，請確認！
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzj7cO_mI_QaEAqPU8zEV8o-hKhRxbtOy3gnqbcUK9Din_EZYeK4ISlDAuPEILHwsVy6Q/exec'; 
     let allData = [];
 
     window.onload = loadPosts;
+
+    function toggleInfoBox() {
+        const type = document.getElementById('p_postType').value;
+        if (type === '敲碗') {
+            document.getElementById('info_k').style.display = 'block';
+            document.getElementById('info_q').style.display = 'none';
+        } else {
+            document.getElementById('info_k').style.display = 'none';
+            document.getElementById('info_q').style.display = 'block';
+        }
+    }
 
     async function loadPosts() {
         document.getElementById('loadingMsg').style.display = 'block';
@@ -255,15 +185,12 @@
         container.innerHTML = '';
         document.getElementById('loadingMsg').style.display = 'none';
 
-        const mainPosts = dataArray.filter(p => !p.parentID);
-        const replies = dataArray.filter(p => p.parentID);
-
-        if (mainPosts.length === 0) {
+        if (dataArray.length === 0) {
             container.innerHTML = '<div class="system-msg">目前尚無討論，成為第一位發聲的人吧！</div>';
             return;
         }
 
-        mainPosts.forEach(post => {
+        dataArray.forEach(post => {
             let mediaHtml = '';
             if (post.media && post.media.length > 0) {
                 post.media.forEach(m => {
@@ -275,9 +202,9 @@
                 });
             }
 
-            const postReplies = replies.filter(r => r.parentID === post.postID).reverse(); 
+            // 直接提取附屬在該貼文內的留言陣列 (新架構優勢)
             let repliesHtml = '';
-            postReplies.forEach(r => {
+            post.replies.forEach(r => {
                 repliesHtml += `
                     <div class="reply-item">
                         <div class="reply-header">
@@ -290,6 +217,8 @@
                 `;
             });
 
+            const typeBadge = post.postType ? `<span class="badge type-tag">${post.postType}</span>` : '';
+
             const html = `
                 <div class="panel">
                     <div class="post-header">
@@ -298,6 +227,7 @@
                             <span class="post-time">${formatDate(post.timestamp)}</span>
                         </div>
                         <div class="badges">
+                            ${typeBadge}
                             ${post.gender !== '不透露' ? `<span class="badge">${post.gender}</span>` : ''}
                             ${post.jobTitle !== '不透露' ? `<span class="badge job">${post.jobTitle}</span>` : ''}
                             ${post.age !== '不透露' ? `<span class="badge">${post.age}</span>` : ''}
@@ -308,7 +238,7 @@
                     <div class="post-content">${linkify(escapeHtml(post.content))}</div>
                     ${mediaHtml ? `<div class="media-box">${mediaHtml}</div>` : ''}
                     
-                    <button class="btn-reply" onclick="toggleReplyForm('${post.postID}')">參與討論 (${postReplies.length})</button>
+                    <button class="btn-reply" onclick="toggleReplyForm('${post.postID}')">參與討論 (${post.replies.length})</button>
 
                     <div class="replies-wrapper">
                         ${repliesHtml}
@@ -341,12 +271,14 @@
     }
 
     async function submitPost() {
+        const postType = document.getElementById('p_postType').value;
+        const email = document.getElementById('p_email').value.trim();
         const nickname = document.getElementById('p_nickname').value.trim();
         const content = document.getElementById('p_content').value.trim();
         const fileInput = document.getElementById('p_files');
         const btn = document.getElementById('btnSubmitPost');
         
-        if (!nickname || !content) return alert("暱稱與內容為必填！");
+        if (!nickname || !email || !content) return alert("暱稱、Email 與討論內容為必填！");
         
         btn.innerText = "封裝上傳中，請稍候...";
         btn.disabled = true;
@@ -356,7 +288,8 @@
             const payload = {
                 action: 'addPost',
                 payload: {
-                    nickname: nickname, gender: document.getElementById('p_gender').value,
+                    postType: postType, email: email, nickname: nickname, 
+                    gender: document.getElementById('p_gender').value,
                     jobTitle: document.getElementById('p_job').value || '不透露',
                     age: document.getElementById('p_age').value,
                     location: document.getElementById('p_location').value || '不透露',
@@ -366,8 +299,8 @@
             
             await sendToServer(payload);
             
-            // 無縫更新
             document.getElementById('p_content').value = '';
+            document.getElementById('p_email').value = ''; 
             document.getElementById('p_files').value = '';
             await loadPosts(); 
             window.scrollTo({ top: 0, behavior: 'smooth' }); 
@@ -425,11 +358,7 @@
     }
 
     async function sendToServer(data) {
-        const res = await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(data)
-        });
+        const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(data) });
         const result = await res.json();
         if (result.error) throw new Error(result.error);
         return result;
@@ -442,7 +371,8 @@
         const filtered = allData.filter(p => 
             (p.nickname && p.nickname.toLowerCase().includes(query)) || 
             (p.content && p.content.toLowerCase().includes(query)) ||
-            (p.jobTitle && p.jobTitle.toLowerCase().includes(query))
+            (p.jobTitle && p.jobTitle.toLowerCase().includes(query)) ||
+            (p.postType && p.postType.toLowerCase().includes(query))
         );
         renderPosts(filtered);
     }
