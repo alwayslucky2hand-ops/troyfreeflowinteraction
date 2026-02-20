@@ -5,64 +5,179 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>特洛伊敲碗解惑區</title>
     <style>
-        /* 🎨 FFS 品牌視覺系統 (Brand CIS) 保持不變 */
+        /* ==========================================
+           🎨 FFS 品牌視覺系統 (已與部落格同步，移除粉紅，導入灰綠)
+           ========================================== */
         :root {
-            --primary-yellow: #FFD700; --secondary-slate: #708090; --accent-pink: #FFC0CB; 
-            --bg-pure: #FFFFFF; --text-dark: #2C3E50; --text-muted: #708090; 
-            --border-width: 2px; --radius-soft: 12px; --space-xl: 40px; 
+            --primary-yellow: #E1B12C;     /* 主色：溫潤芥末暖黃 */
+            --primary-hover: #C89D26;      /* 懸停加深 */
+            --slate-blue: #708090;         /* 輔色：板岩藍 */
+            --accent-green: #619A86;       /* 強調色：溫暖灰綠色 (取代脂粉紅) */
+            --bg-pure: #FFFFFF;            /* 極簡白底 */
+            --text-dark: #333333;          /* 內文深灰 */
+            --text-muted: #64748b;         /* 次要文字 */
+            --glass-border: #cbd5e1;       /* 柔和框線，提升呼吸感 */
+            --radius-soft: 12px;
+            --space-xl: 40px;
         }
-        *, *::before, *::after { box-sizing: border-box; }
-        body { font-family: 'Microsoft JhengHei', '微軟正黑體', sans-serif; background: var(--bg-pure); color: var(--text-dark); margin: 0; padding: var(--space-xl) 20px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
-        .container { max-width: 640px; margin: 0 auto; padding-bottom: 60px; }
-        h1, h2, h3, strong { font-weight: bold; color: var(--text-dark); }
-        .header { margin-bottom: var(--space-xl); padding-bottom: 20px; border-bottom: var(--border-width) solid var(--secondary-slate); text-align: center; }
-        .header h1 { margin: 0 0 16px 0; font-size: 1.8rem; letter-spacing: 0.05em; }
-        .search-box { width: 100%; padding: 16px; border: var(--border-width) solid var(--secondary-slate); border-radius: var(--radius-soft); font-size: 1rem; color: var(--text-dark); background: var(--bg-pure); transition: all 0.2s ease; }
-        .search-box:focus { outline: none; border-color: var(--primary-yellow); background: #FFFAEA; }
-        .search-box::placeholder { color: var(--text-muted); font-weight: normal; }
-        .panel { background: var(--bg-pure); border: var(--border-width) solid var(--secondary-slate); border-radius: var(--radius-soft); padding: 32px 24px; margin-bottom: 32px; transition: all 0.3s ease;}
         
-        /* 🌟 新增：收合標題的樣式 */
-        .panel-title { margin: 0 0 24px 0; font-size: 1.3rem; border-bottom: 1px dashed var(--secondary-slate); padding-bottom: 12px; }
+        *, *::before, *::after { box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Microsoft JhengHei', '微軟正黑體', sans-serif; 
+            background: var(--bg-pure); 
+            color: var(--text-dark); 
+            margin: 0; 
+            padding: var(--space-xl) 20px; 
+            line-height: 1.8; 
+            -webkit-font-smoothing: antialiased; 
+        }
+        
+        .container { max-width: 640px; margin: 0 auto; padding-bottom: 60px; }
+        h1, h2, h3, strong { font-weight: bold; color: var(--slate-blue); }
+        
+        .header { 
+            margin-bottom: var(--space-xl); 
+            padding-bottom: 20px; 
+            text-align: center; 
+        }
+        .header h1 { margin: 0 0 20px 0; font-size: 1.8rem; letter-spacing: 0.05em; }
+        
+        /* 搜尋框：柔和框線與光暈特效 */
+        .search-box { 
+            width: 100%; 
+            padding: 16px 20px; 
+            border: 1px solid var(--glass-border); 
+            border-radius: var(--radius-soft); 
+            font-size: 1rem; 
+            color: var(--text-dark); 
+            background: #f8fafc; 
+            transition: all 0.3s ease; 
+        }
+        .search-box:focus { 
+            outline: none; 
+            border-color: var(--primary-yellow); 
+            background: var(--bg-pure);
+            box-shadow: 0 0 0 3px rgba(225, 177, 44, 0.2); 
+        }
+        .search-box::placeholder { color: var(--text-muted); font-weight: normal; }
+        
+        /* 區塊面板：大量留白、細緻框線 */
+        .panel { 
+            background: var(--bg-pure); 
+            border: 1px solid var(--glass-border); 
+            border-radius: var(--radius-soft); 
+            padding: 35px 30px; 
+            margin-bottom: 32px; 
+            transition: transform 0.2s ease;
+        }
+        
+        .panel-title { margin: 0 0 24px 0; font-size: 1.3rem; border-bottom: 1px dashed var(--glass-border); padding-bottom: 16px; }
         .toggle-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; transition: color 0.2s ease; margin-bottom: 0; }
-        .toggle-header:hover { color: var(--secondary-slate); }
+        .toggle-header:hover { color: var(--primary-hover); }
         .toggle-icon { font-size: 1.1rem; color: var(--primary-yellow); transition: transform 0.3s ease; }
         
+        /* 表單設計 */
         .form-group { display: flex; flex-direction: column; margin-bottom: 24px; }
-        .form-group label { font-size: 0.95rem; font-weight: bold; color: var(--secondary-slate); margin-bottom: 8px; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px 16px; border: var(--border-width) solid var(--secondary-slate); border-radius: var(--radius-soft); font-size: 1.05rem; background: var(--bg-pure); color: var(--text-dark); font-family: 'Microsoft JhengHei', sans-serif; }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary-yellow); background: #FFFAEA; }
+        .form-group label { font-size: 0.95rem; font-weight: bold; color: var(--slate-blue); margin-bottom: 8px; }
+        .form-group input, .form-group select, .form-group textarea { 
+            width: 100%; 
+            padding: 14px 16px; 
+            border: 1px solid var(--glass-border); 
+            border-radius: var(--radius-soft); 
+            font-size: 1.05rem; 
+            background: var(--bg-pure); 
+            color: var(--text-dark); 
+            font-family: 'Microsoft JhengHei', sans-serif; 
+            transition: all 0.3s ease;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { 
+            outline: none; 
+            border-color: var(--primary-yellow); 
+            box-shadow: 0 0 0 3px rgba(225, 177, 44, 0.2); 
+        }
         .form-group textarea { min-height: 140px; resize: vertical; }
-        button { background: var(--primary-yellow); color: var(--text-dark); border: var(--border-width) solid var(--secondary-slate); padding: 16px 24px; border-radius: var(--radius-soft); font-weight: bold; font-size: 1.1rem; cursor: pointer; width: 100%; font-family: 'Microsoft JhengHei', sans-serif; }
-        button:hover { background: #F0CA00; }
-        button:disabled { background: #F5F5F5; color: var(--text-muted); cursor: not-allowed; border-color: #DDE1E6; }
-        button.btn-reply { background: transparent; color: var(--secondary-slate); margin-top: 20px; padding: 12px; font-size: 0.95rem; border: var(--border-width) dashed var(--secondary-slate); }
-        button.btn-reply:hover { background: var(--accent-pink); color: var(--text-dark); border-style: solid; border-color: var(--text-dark); }
-        .post-header { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
-        .post-author-row { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .post-author { font-size: 1.2rem; font-weight: bold; color: var(--text-dark); }
-        .post-time { color: var(--secondary-slate); font-size: 0.85rem; }
+        
+        /* 按鈕設計 */
+        button { 
+            background: var(--primary-yellow); 
+            color: #ffffff; 
+            border: none; 
+            padding: 16px 24px; 
+            border-radius: var(--radius-soft); 
+            font-weight: bold; 
+            font-size: 1.1rem; 
+            cursor: pointer; 
+            width: 100%; 
+            font-family: 'Microsoft JhengHei', sans-serif; 
+            transition: background 0.2s;
+        }
+        button:hover { background: var(--primary-hover); }
+        button:disabled { background: #f1f5f9; color: var(--text-muted); cursor: not-allowed; }
+        
+        /* 回覆按鈕：懸停時展現灰綠色 */
+        button.btn-reply { 
+            background: transparent; 
+            color: var(--slate-blue); 
+            margin-top: 20px; 
+            padding: 12px; 
+            font-size: 0.95rem; 
+            border: 1px dashed var(--slate-blue); 
+        }
+        button.btn-reply:hover { 
+            background: var(--accent-green); 
+            color: #ffffff; 
+            border-style: solid; 
+            border-color: var(--accent-green); 
+        }
+        
+        /* 文章標頭與標籤 */
+        .post-header { display: flex; flex-direction: column; gap: 8px; margin-bottom: 25px; }
+        .post-author-row { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .post-author { font-size: 1.3rem; font-weight: bold; color: var(--text-dark); }
+        .post-time { color: var(--slate-blue); font-size: 0.85rem; }
+        
         .badges { display: flex; flex-wrap: wrap; gap: 8px; }
-        .badge { background: var(--accent-pink); border: 1px solid var(--secondary-slate); color: var(--text-dark); padding: 4px 10px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; }
-        .badge.job { background: var(--primary-yellow); }
-        .badge.type-tag { background: var(--text-dark); color: #FFF; }
-        .post-content { font-size: 1.1rem; white-space: pre-wrap; margin-bottom: 24px; word-break: break-word; color: var(--text-dark); }
-        .post-content a { color: var(--secondary-slate); text-decoration: underline; font-weight: bold; }
+        /* 預設標籤改為灰綠色 */
+        .badge { background: var(--accent-green); border: none; color: #ffffff; padding: 4px 12px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; }
+        .badge.job { background: var(--primary-yellow); color: #ffffff; }
+        .badge.type-tag { background: var(--slate-blue); color: #FFF; }
+        
+        .post-content { font-size: 1.1rem; white-space: pre-wrap; margin-bottom: 24px; word-break: break-word; color: #475569; }
+        .post-content a { color: var(--accent-green); text-decoration: underline; font-weight: bold; }
+        
+        /* 媒體區塊 */
         .media-box { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
-        .media-box img { max-width: 100%; border-radius: var(--radius-soft); border: var(--border-width) solid var(--secondary-slate); }
-        .media-box iframe { width: 100%; height: 280px; border-radius: var(--radius-soft); border: var(--border-width) solid var(--secondary-slate); background: var(--bg-pure); }
+        .media-box img { max-width: 100%; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); }
+        .media-box iframe { width: 100%; height: 280px; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); background: #f8fafc; }
+        
+        /* 回覆區塊 */
         .replies-wrapper { margin-top: 24px; padding-top: 10px; }
-        .reply-item { border-left: 4px solid var(--primary-yellow); padding: 0 0 16px 16px; margin-bottom: 20px; }
-        .reply-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
-        .reply-name { font-weight: bold; color: var(--text-dark); }
-        .reply-time { font-size: 0.8rem; color: var(--secondary-slate); }
-        .reply-content { font-size: 1rem; margin: 0; }
-        .system-msg { text-align: center; color: var(--secondary-slate); padding: 40px 20px; font-size: 1.1rem; font-weight: bold; }
+        .reply-item { 
+            background: #f8fafc;
+            border-left: 4px solid var(--accent-green); 
+            padding: 16px; 
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 16px; 
+        }
+        .reply-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+        .reply-name { font-weight: bold; color: var(--slate-blue); }
+        .reply-time { font-size: 0.8rem; color: var(--text-muted); }
+        .reply-content { font-size: 1rem; margin: 0; color: #475569; }
+        
+        .system-msg { text-align: center; color: var(--slate-blue); padding: 40px 20px; font-size: 1.1rem; font-weight: bold; }
+        
         input[type="file"] { border: none !important; padding: 0 !important; background: transparent !important; }
-        input[type="file"]::file-selector-button { background: var(--secondary-slate); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-family: 'Microsoft JhengHei'; cursor: pointer; margin-right: 15px; font-weight: bold; }
-        .info-box { font-size: 0.9rem; color: var(--text-dark); margin-top: 12px; background: #f8f9fa; padding: 16px; border-radius: var(--radius-soft); border: 1px dashed var(--secondary-slate); }
-        .info-box ul { margin: 8px 0 0 0; padding-left: 20px; }
-        .info-box li { margin-bottom: 4px; }
+        input[type="file"]::file-selector-button { background: var(--slate-blue); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-family: 'Microsoft JhengHei'; cursor: pointer; margin-right: 15px; font-weight: bold; transition: background 0.2s;}
+        input[type="file"]::file-selector-button:hover { background: #475569; }
+        
+        .info-box { font-size: 0.95rem; color: var(--slate-blue); margin-top: 12px; background: #f8fafc; padding: 20px; border-radius: var(--radius-soft); border: 1px dashed var(--glass-border); }
+        .info-box ul { margin: 12px 0 0 0; padding-left: 20px; }
+        .info-box li { margin-bottom: 6px; }
+
+        @media (max-width: 600px) {
+            .panel { padding: 25px 20px; }
+        }
     </style>
 </head>
 <body>
@@ -165,7 +280,6 @@
 
     window.onload = loadPosts;
 
-    // 🌟 新增：收合/展開 發文表單的控制函數
     function toggleNewPostForm() {
         const wrapper = document.getElementById('newPostFormWrapper');
         const icon = document.getElementById('toggleIcon');
@@ -174,8 +288,8 @@
         if (wrapper.style.display === 'none') {
             wrapper.style.display = 'block';
             icon.innerText = '▲';
-            header.style.borderBottom = '1px dashed var(--secondary-slate)';
-            header.style.paddingBottom = '12px';
+            header.style.borderBottom = '1px dashed var(--glass-border)';
+            header.style.paddingBottom = '16px';
         } else {
             wrapper.style.display = 'none';
             icon.innerText = '▼';
@@ -272,7 +386,7 @@
                     <div class="replies-wrapper">
                         ${repliesHtml}
                         
-                        <div id="reply-form-${post.postID}" style="display:none; margin-top:24px; padding-top:24px; border-top: 2px dashed var(--secondary-slate);">
+                        <div id="reply-form-${post.postID}" style="display:none; margin-top:24px; padding-top:24px; border-top: 1px dashed var(--glass-border);">
                             <div class="form-group">
                                 <label>您的暱稱</label>
                                 <input type="text" id="r_nickname_${post.postID}" placeholder="必填">
@@ -333,7 +447,7 @@
             document.getElementById('p_email').value = ''; 
             document.getElementById('p_files').value = '';
             
-            // 🌟 發佈成功後，自動收合表單，讓畫面專注在新的文章上
+            // 發佈成功後，自動收合表單，讓畫面專注在新的文章上
             toggleNewPostForm();
 
             await loadPosts(); 
