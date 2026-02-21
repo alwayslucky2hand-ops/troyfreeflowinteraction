@@ -31,11 +31,11 @@
         button:hover { background: var(--primary-hover); transform: translateY(-1px); }
         button:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; box-shadow: none; }
         
-        /* 篩選區塊 (分類按鈕並排) */
+        /* 篩選區塊 */
         .filter-section { background: var(--bg-pure); margin-bottom: 32px; padding: 24px; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); }
         .filter-title { margin-bottom: 12px; font-weight: bold; color: var(--slate-blue); font-size: 0.9em; letter-spacing: 0.05em; }
         .category-nav { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: nowrap; overflow-x: auto; }
-        .cat-btn { background: #f8fafc; color: var(--slate-blue); padding: 8px 18px; border-radius: 30px; border: 1px solid var(--glass-border); font-size: 0.95em; cursor: pointer; transition: all 0.2s; white-space: nowrap; margin-bottom: 0; box-shadow: none; width: auto; }
+        .cat-btn { background: #f8fafc; color: var(--slate-blue); padding: 8px 18px; border-radius: 30px; border: 1px solid var(--glass-border); font-size: 0.95em; font-weight: normal; cursor: pointer; transition: all 0.2s; white-space: nowrap; margin-bottom: 0; box-shadow: none; width: auto; }
         .cat-btn.active, .cat-btn:hover { background: var(--slate-blue); color: #ffffff; border-color: var(--slate-blue); transform: none; }
 
         /* 發文表單 UI */
@@ -63,11 +63,9 @@
         .interaction-bar { display: flex; gap: 10px; margin-top: 10px; border-top: 1px dashed var(--glass-border); padding-top: 20px; }
         .btn-interact { background: transparent; color: var(--slate-blue); border: 1px solid var(--glass-border); width: auto; padding: 8px 16px; font-size: 0.95rem; box-shadow: none; margin-bottom: 0; }
         .btn-interact:hover { background: #f8fafc; color: var(--text-dark); border-color: var(--slate-blue); transform: none; }
-        .btn-link { background: none; border: none; color: var(--slate-blue); text-decoration: underline; font-size: 0.9rem; cursor: pointer; padding: 0; margin: 0; box-shadow: none; width: auto; font-weight: normal; }
-        .btn-link:hover { background: none; color: var(--text-dark); transform: none; }
 
         .comments-wrapper { margin-top: 20px; background: #f8fafc; padding: 20px; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); }
-        .comment-item { background: #fff; padding: 16px; border-radius: 8px; margin-bottom: 16px; border-left: 4px solid var(--accent-green); }
+        .comment-item { background: #fff; padding: 16px; border-radius: 8px; margin-bottom: 16px; border-left: 4px solid var(--accent-green); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .comment-text { font-size: 1rem; color: var(--text-dark); white-space: pre-wrap; word-break: break-word; }
         .nested-replies { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--glass-border); padding-left: 10px; }
         .nested-reply-item { margin-bottom: 10px; font-size: 0.95rem; color: #475569; padding-left: 15px; border-left: 2px solid var(--glass-border); white-space: pre-wrap; }
@@ -140,9 +138,11 @@
                 </select>
             </div>
             <div class="form-group"><label>暱稱</label><input type="text" id="p_nickname" placeholder="您的稱呼 (必填)"></div>
+            <div class="form-group"><label>性別</label><select id="p_gender"><option>不透露</option><option>男</option><option>女</option></select></div>
             <div class="form-group"><label>職稱</label><input type="text" id="p_job" placeholder="選填"></div>
+            <div class="form-group"><label>年齡</label><select id="p_age"><option>不透露</option><option>20歲以下</option><option>21-30歲</option><option>31-40歲</option><option>41歲以上</option></select></div>
+            <div class="form-group"><label>居住地</label><input type="text" id="p_location" placeholder="選填"></div>
             <div class="form-group"><label>討論內容</label><textarea id="p_content" placeholder="請描述您的問題... (必填)"></textarea></div>
-            <div class="form-group"><label>附加檔案</label><input type="file" id="p_files" multiple accept="image/*,video/*" style="border:none; padding:0; background:transparent;"></div>
             <button id="btnSubmitPost" onclick="submitPost()">發佈文章</button>
             <span id="post-msg" class="inline-msg"></span>
         </div>
@@ -155,7 +155,7 @@
 
 <script>
     // 🚨 替換為你的 GAS 網址
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyGoQ6UWEAMataZ1xUC0Yr1A45bOGU7WCFrsCMVq0H2LWIF4kzLG0s0-Oq79npKFKNbWw/exec'; 
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwxh_rf8kWwdILlDRGWiVUcSeZsszmptpm9W8JhwVQ_NhFi_R5tR92xFOMMhrtaDYuqNw/exec'; 
     let allData = [];
     let currentUserEmail = ''; // 🌟 儲存登入的 Email
     let currentSearchQuery = '';
@@ -287,15 +287,10 @@
                         </div>`;
                 });
 
-                // +1 名單
-                const p1ListStr = p1Count > 0 ? post.plusOnes.join('\\n') : '無人';
-
+                // 只純粹顯示按鈕，不再彈出名單
                 interactionHTML = `
                     <div class="interaction-bar">
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <button class="btn-interact" id="btn-p1-${post.postID}" onclick="submitInteraction('${post.postID}', 'plusOne', null, this)">+1 (${p1Count})</button>
-                            ${p1Count > 0 ? `<button class="btn-link" onclick="alert('同問名單：\\n${p1ListStr}')">查看名單</button>` : ''}
-                        </div>
+                        <button class="btn-interact" id="btn-p1-${post.postID}" onclick="submitInteraction('${post.postID}', 'plusOne', null, this)">同問 / +1 (${p1Count})</button>
                         <button class="btn-interact" onclick="toggleElement('comments-${post.postID}')">留言討論 (${commentCount})</button>
                     </div>
                     <div id="comments-${post.postID}" class="comments-wrapper" style="display:none;">
@@ -359,13 +354,13 @@
         
         const btn = document.getElementById('btnSubmitPost'); btn.innerText = "發佈中..."; btn.disabled = true;
         try {
-            // 檔案處理略 (此處僅保留原有寫法但不實作讀檔邏輯避免過長，假設你有保留原本 processFiles 函式)
             const payload = {
                 action: 'addPost',
                 payload: {
                     postType: document.getElementById('p_postType').value, email: currentUserEmail, nickname, 
-                    gender: "不透露", jobTitle: document.getElementById('p_job').value || '不透露',
-                    age: "不透露", location: "不透露", content, files: []
+                    gender: document.getElementById('p_gender').value, jobTitle: document.getElementById('p_job').value || '不透露',
+                    age: document.getElementById('p_age').value, location: document.getElementById('p_location').value || '不透露',
+                    content: content
                 }
             };
             await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) });
