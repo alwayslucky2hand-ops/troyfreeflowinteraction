@@ -21,10 +21,18 @@
         .header { margin-bottom: 24px; padding-bottom: 10px; text-align: center; }
         .header h1 { margin: 0 0 20px 0; font-size: 1.8rem; letter-spacing: 0.05em; }
         
-        /* 區塊面板與輸入框 */
+        /* 區塊面板 */
         .panel { background: var(--bg-pure); border: 1px solid var(--glass-border); border-radius: var(--radius-soft); padding: 35px 30px; margin-bottom: 32px; }
-        .search-box, .input-box, select, textarea { width: 100%; padding: 14px 18px; border: 1px solid var(--glass-border); border-radius: 8px; font-size: 1rem; color: var(--text-dark); background: #f8fafc; transition: all 0.3s ease; font-family: inherit; margin-bottom: 10px; }
-        .search-box:focus, .input-box:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary-yellow); background: var(--bg-pure); box-shadow: 0 0 0 3px rgba(225, 177, 44, 0.2); }
+        
+        /* 🌟 修正：讓所有 input, select, textarea 都套用相同的圓潤漂亮樣式 */
+        .search-box, .input-box, .form-group input, select, textarea { 
+            width: 100%; padding: 14px 18px; border: 1px solid var(--glass-border); 
+            border-radius: 8px; font-size: 1rem; color: var(--text-dark); 
+            background: #f8fafc; transition: all 0.3s ease; font-family: inherit; margin-bottom: 10px; 
+        }
+        .search-box:focus, .input-box:focus, .form-group input:focus, select:focus, textarea:focus { 
+            outline: none; border-color: var(--primary-yellow); background: var(--bg-pure); box-shadow: 0 0 0 3px rgba(225, 177, 44, 0.2); 
+        }
         textarea { min-height: 100px; resize: vertical; }
         
         button { background: var(--primary-yellow); color: #ffffff; border: none; padding: 14px 28px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; width: 100%; transition: background 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 10px; }
@@ -63,6 +71,10 @@
         .interaction-bar { display: flex; gap: 10px; margin-top: 10px; border-top: 1px dashed var(--glass-border); padding-top: 20px; }
         .btn-interact { background: transparent; color: var(--slate-blue); border: 1px solid var(--glass-border); width: auto; padding: 8px 16px; font-size: 0.95rem; box-shadow: none; margin-bottom: 0; }
         .btn-interact:hover { background: #f8fafc; color: var(--text-dark); border-color: var(--slate-blue); transform: none; }
+        
+        /* 🌟 已+1 按鈕的樣式 */
+        .btn-interact.active { background: var(--slate-blue); color: #ffffff; border-color: var(--slate-blue); }
+        .btn-interact.active:hover { background: var(--text-muted); color: #ffffff; }
 
         .comments-wrapper { margin-top: 20px; background: #f8fafc; padding: 20px; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); }
         .comment-item { background: #fff; padding: 16px; border-radius: 8px; margin-bottom: 16px; border-left: 4px solid var(--accent-green); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
@@ -155,7 +167,7 @@
 
 <script>
     // 🚨 替換為你的 GAS 網址
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwxh_rf8kWwdILlDRGWiVUcSeZsszmptpm9W8JhwVQ_NhFi_R5tR92xFOMMhrtaDYuqNw/exec'; 
+    const API_URL = '你的_WEB_APP_URL'; 
     let allData = [];
     let currentUserEmail = ''; // 🌟 儲存登入的 Email
     let currentSearchQuery = '';
@@ -241,6 +253,15 @@
 
     function handleDateChange() { currentDate = document.getElementById('datePicker').value; currentPage = 1; renderPosts(); }
     function clearDateFilter() { document.getElementById('datePicker').value = ''; currentDate = ''; currentPage = 1; renderPosts(); }
+    
+    function getYYYYMMDD(dateStr) {
+        try {
+            const d = new Date(dateStr);
+            if (isNaN(d.getTime())) return '';
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        } catch(e) { return ''; }
+    }
+
     function filterPosts() { currentSearchQuery = document.getElementById('searchInput').value.toLowerCase().trim(); currentPage = 1; renderPosts(); }
 
     function renderPosts() {
@@ -287,10 +308,14 @@
                         </div>`;
                 });
 
-                // 只純粹顯示按鈕，不再彈出名單
+                // 🌟 動態判斷當前使用者是否已點過 +1，並改變按鈕樣式與文字
+                const hasP1 = post.plusOnes && post.plusOnes.includes(currentUserEmail);
+                const p1BtnClass = hasP1 ? "btn-interact active" : "btn-interact";
+                const p1BtnText = hasP1 ? `已同問 (${p1Count})` : `同問 / +1 (${p1Count})`;
+
                 interactionHTML = `
                     <div class="interaction-bar">
-                        <button class="btn-interact" id="btn-p1-${post.postID}" onclick="submitInteraction('${post.postID}', 'plusOne', null, this)">同問 / +1 (${p1Count})</button>
+                        <button class="${p1BtnClass}" id="btn-p1-${post.postID}" onclick="submitInteraction('${post.postID}', 'plusOne', null, this)">${p1BtnText}</button>
                         <button class="btn-interact" onclick="toggleElement('comments-${post.postID}')">留言討論 (${commentCount})</button>
                     </div>
                     <div id="comments-${post.postID}" class="comments-wrapper" style="display:none;">
