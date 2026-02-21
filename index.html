@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>特洛伊敲碗解惑區</title>
     <style>
         /* ==========================================
@@ -36,75 +36,27 @@
         .container { max-width: 640px; margin: 0 auto; padding-bottom: 60px; }
         h1, h2, h3, strong { font-weight: bold; color: var(--slate-blue); }
         
-        .header { 
-            margin-bottom: 24px; 
-            padding-bottom: 10px; 
-            text-align: center; 
-        }
+        .header { margin-bottom: 24px; padding-bottom: 10px; text-align: center; }
         .header h1 { margin: 0 0 20px 0; font-size: 1.8rem; letter-spacing: 0.05em; }
         
         /* 搜尋框 */
         .search-box { 
-            width: 100%; 
-            padding: 16px 20px; 
-            border: 1px solid var(--glass-border); 
-            border-radius: var(--radius-soft); 
-            font-size: 1rem; 
-            color: var(--text-dark); 
-            background: #f8fafc; 
-            transition: all 0.3s ease; 
+            width: 100%; padding: 16px 20px; border: 1px solid var(--glass-border); 
+            border-radius: var(--radius-soft); font-size: 1rem; color: var(--text-dark); 
+            background: #f8fafc; transition: all 0.3s ease; 
         }
-        .search-box:focus { 
-            outline: none; 
-            border-color: var(--primary-yellow); 
-            background: var(--bg-pure);
-            box-shadow: 0 0 0 3px rgba(225, 177, 44, 0.2); 
-        }
+        .search-box:focus { outline: none; border-color: var(--primary-yellow); background: var(--bg-pure); box-shadow: 0 0 0 3px rgba(225, 177, 44, 0.2); }
         .search-box::placeholder { color: var(--text-muted); font-weight: normal; }
 
-        /* 篩選區塊樣式 */
-        .filter-section {
-            background: var(--bg-pure);
-            margin-bottom: 32px; 
-            padding: 24px; 
-            border-radius: var(--radius-soft); 
-            border: 1px solid var(--glass-border);
-        }
-        .filter-title {
-            margin-bottom: 12px; 
-            font-weight: bold; 
-            color: var(--slate-blue); 
-            font-size: 0.9em;
-            letter-spacing: 0.05em;
-        }
+        /* 篩選區塊 */
+        .filter-section { background: var(--bg-pure); margin-bottom: 32px; padding: 24px; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); }
+        .filter-title { margin-bottom: 12px; font-weight: bold; color: var(--slate-blue); font-size: 0.9em; letter-spacing: 0.05em; }
         .category-nav { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        .cat-btn { 
-            background: #f8fafc; 
-            color: var(--slate-blue); 
-            padding: 8px 18px; 
-            border-radius: 30px; 
-            border: 1px solid var(--glass-border); 
-            font-size: 0.95em; 
-            font-weight: normal;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .cat-btn.active { 
-            background: var(--slate-blue); 
-            color: #ffffff; 
-            border-color: var(--slate-blue);
-        }
+        .cat-btn { background: #f8fafc; color: var(--slate-blue); padding: 8px 18px; border-radius: 30px; border: 1px solid var(--glass-border); font-size: 0.95em; font-weight: normal; cursor: pointer; transition: all 0.2s ease; }
+        .cat-btn.active { background: var(--slate-blue); color: #ffffff; border-color: var(--slate-blue); }
         
         /* 區塊面板 */
-        .panel { 
-            background: var(--bg-pure); 
-            border: 1px solid var(--glass-border); 
-            border-radius: var(--radius-soft); 
-            padding: 35px 30px; 
-            margin-bottom: 32px; 
-            transition: transform 0.2s ease;
-        }
-        
+        .panel { background: var(--bg-pure); border: 1px solid var(--glass-border); border-radius: var(--radius-soft); padding: 35px 30px; margin-bottom: 32px; transition: transform 0.2s ease; }
         .panel-title { margin: 0 0 24px 0; font-size: 1.3rem; border-bottom: 1px dashed var(--glass-border); padding-bottom: 16px; }
         .toggle-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; transition: color 0.2s ease; margin-bottom: 0; }
         .toggle-header:hover { color: var(--primary-hover); }
@@ -113,62 +65,20 @@
         /* 表單設計 */
         .form-group { display: flex; flex-direction: column; margin-bottom: 24px; }
         .form-group label { font-size: 0.95rem; font-weight: bold; color: var(--slate-blue); margin-bottom: 8px; }
-        .form-group input, .form-group select, .form-group textarea { 
-            width: 100%; 
-            padding: 14px 16px; 
-            border: 1px solid var(--glass-border); 
-            border-radius: var(--radius-soft); 
-            font-size: 1.05rem; 
-            background: var(--bg-pure); 
-            color: var(--text-dark); 
-            font-family: 'Microsoft JhengHei', sans-serif; 
-            transition: all 0.3s ease;
-        }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { 
-            outline: none; 
-            border-color: var(--primary-yellow); 
-            box-shadow: 0 0 0 3px rgba(225, 177, 44, 0.2); 
-        }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px 16px; border: 1px solid var(--glass-border); border-radius: var(--radius-soft); font-size: 1.05rem; background: var(--bg-pure); color: var(--text-dark); font-family: 'Microsoft JhengHei', sans-serif; transition: all 0.3s ease; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary-yellow); box-shadow: 0 0 0 3px rgba(225, 177, 44, 0.2); }
         .form-group textarea { min-height: 140px; resize: vertical; }
         
         /* 按鈕設計 */
-        button { 
-            background: var(--primary-yellow); 
-            color: #ffffff; 
-            border: none; 
-            padding: 16px 24px; 
-            border-radius: var(--radius-soft); 
-            font-weight: bold; 
-            font-size: 1.1rem; 
-            cursor: pointer; 
-            width: 100%; 
-            font-family: 'Microsoft JhengHei', sans-serif; 
-            transition: background 0.2s;
-        }
+        button { background: var(--primary-yellow); color: #ffffff; border: none; padding: 16px 24px; border-radius: var(--radius-soft); font-weight: bold; font-size: 1.1rem; cursor: pointer; width: 100%; font-family: 'Microsoft JhengHei', sans-serif; transition: background 0.2s; }
         button:hover { background: var(--primary-hover); }
         button:disabled { background: #f1f5f9; color: var(--text-muted); cursor: not-allowed; }
         
-        button.btn-reply { 
-            background: transparent; 
-            color: var(--slate-blue); 
-            margin-top: 20px; 
-            padding: 12px; 
-            font-size: 0.95rem; 
-            border: 1px dashed var(--slate-blue); 
-        }
-        button.btn-reply:hover { 
-            background: var(--accent-green); 
-            color: #ffffff; 
-            border-style: solid; 
-            border-color: var(--accent-green); 
-        }
-        
-        /* 文章標頭與標籤 */
+        /* 文章標頭 */
         .post-header { display: flex; flex-direction: column; gap: 8px; margin-bottom: 25px; }
         .post-author-row { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
         .post-author { font-size: 1.3rem; font-weight: bold; color: var(--text-dark); }
         .post-time { color: var(--slate-blue); font-size: 0.85rem; }
-        
         .badges { display: flex; flex-wrap: wrap; gap: 8px; }
         .badge { background: var(--accent-green); border: none; color: #ffffff; padding: 4px 12px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; }
         .badge.job { background: var(--primary-yellow); color: #ffffff; }
@@ -177,52 +87,40 @@
         .post-content { font-size: 1.1rem; white-space: pre-wrap; margin-bottom: 24px; word-break: break-word; color: #475569; }
         .post-content a { color: var(--accent-green); text-decoration: underline; font-weight: bold; }
         
-        /* 媒體區塊 */
         .media-box { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
         .media-box img { max-width: 100%; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); }
         .media-box iframe { width: 100%; height: 280px; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); background: #f8fafc; }
         
-        /* 回覆區塊 */
-        .replies-wrapper { margin-top: 24px; padding-top: 10px; }
-        .reply-item { 
-            background: #f8fafc;
-            border-left: 4px solid var(--accent-green); 
-            padding: 16px; 
-            border-radius: 0 8px 8px 0;
-            margin-bottom: 16px; 
-        }
-        .reply-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
-        .reply-name { font-weight: bold; color: var(--slate-blue); }
-        .reply-time { font-size: 0.8rem; color: var(--text-muted); }
-        .reply-content { font-size: 1rem; margin: 0; color: #475569; }
+        /* 🆕 互動區與留言樣式 */
+        .interaction-bar { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; border-top: 1px dashed var(--glass-border); padding-top: 20px; }
+        .btn-interact { background: transparent; color: var(--slate-blue); border: 1px solid var(--glass-border); width: auto; padding: 10px 16px; font-size: 0.95rem; display: flex; align-items: center; gap: 6px; }
+        .btn-interact:hover { background: #f8fafc; color: var(--text-dark); border-color: var(--slate-blue); }
         
+        .comments-wrapper { margin-top: 20px; background: #f8fafc; padding: 20px; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); }
+        .comment-item { background: #fff; padding: 16px; border-radius: 8px; margin-bottom: 16px; border-left: 4px solid var(--accent-green); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .comment-text { font-size: 1rem; color: var(--text-dark); white-space: pre-wrap; word-break: break-word; }
+        
+        /* 巢狀回覆樣式 */
+        .nested-replies { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--glass-border); padding-left: 10px; }
+        .nested-reply-item { margin-bottom: 10px; font-size: 0.95rem; color: #475569; position: relative; padding-left: 15px; border-left: 2px solid var(--glass-border); white-space: pre-wrap; word-break: break-word; }
+        
+        /* 極簡輸入框 */
+        .mini-input-group { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+        .mini-input { padding: 10px 14px; border: 1px solid var(--glass-border); border-radius: 8px; font-size: 0.95rem; width: 100%; font-family: inherit; }
+        .btn-small { padding: 10px; font-size: 0.95rem; width: 100%; }
+
         .system-msg { text-align: center; color: var(--slate-blue); padding: 40px 20px; font-size: 1.1rem; font-weight: bold; }
         
         input[type="file"] { border: none !important; padding: 0 !important; background: transparent !important; }
-        input[type="file"]::file-selector-button { background: var(--slate-blue); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-family: 'Microsoft JhengHei'; cursor: pointer; margin-right: 15px; font-weight: bold; transition: background 0.2s;}
-        input[type="file"]::file-selector-button:hover { background: #475569; }
-        
+        input[type="file"]::file-selector-button { background: var(--slate-blue); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-family: inherit; cursor: pointer; margin-right: 15px; font-weight: bold; }
         .info-box { font-size: 0.95rem; color: var(--slate-blue); margin-top: 12px; background: #f8fafc; padding: 20px; border-radius: var(--radius-soft); border: 1px dashed var(--glass-border); }
         .info-box ul { margin: 12px 0 0 0; padding-left: 20px; }
-        .info-box li { margin-bottom: 6px; }
-
-        /* 分頁按鈕樣式 */
+        
         .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 30px; flex-wrap: wrap; }
-        .page-btn { 
-            background: var(--bg-pure); color: var(--slate-blue); border: 1px solid var(--glass-border); 
-            padding: 8px 16px; border-radius: 6px; font-size: 0.9em; font-weight: normal; 
-            cursor: pointer; transition: all 0.2s ease; width: auto;
-        }
+        .page-btn { background: var(--bg-pure); color: var(--slate-blue); border: 1px solid var(--glass-border); padding: 8px 16px; border-radius: 6px; font-size: 0.9em; font-weight: normal; cursor: pointer; width: auto; }
         .page-btn.active { background: var(--slate-blue); color: #ffffff; border-color: var(--slate-blue); }
-        .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        @media (max-width: 600px) {
-            .panel { padding: 25px 20px; }
-            .page-btn { width: 100%; margin-bottom: 5px; }
-            #datePicker { width: 100% !important; margin-bottom: 10px !important; }
-            #btnClearDate { width: 100% !important; }
-            .date-filter-group { flex-direction: column; align-items: stretch !important; gap: 0 !important; }
-        }
+        @media (max-width: 600px) { .panel { padding: 25px 20px; } .btn-interact { width: 100%; justify-content: center; } }
     </style>
 </head>
 <body>
@@ -236,153 +134,79 @@
     <div class="filter-section" id="filterSection" style="display: none;">
         <div class="filter-title">討論類型</div>
         <div class="category-nav" id="type-container"></div>
-        
         <div class="filter-title" style="margin-top: 10px;">發佈日期</div>
-        <div class="date-filter-group" style="display: flex; gap: 10px; align-items: center; margin-bottom: 0;">
+        <div style="display: flex; gap: 10px; align-items: center;">
             <input type="date" id="datePicker" class="search-box" style="width: auto; padding: 8px 16px; margin: 0;" onchange="handleDateChange()">
-            <button id="btnClearDate" onclick="clearDateFilter()" class="cat-btn" style="width: auto; padding: 8px 16px; margin: 0; background: #f1f5f9; color: var(--slate-blue);">清除篩選</button>
+            <button onclick="clearDateFilter()" class="cat-btn" style="width: auto; padding: 8px 16px; margin: 0; background: #f1f5f9;">清除</button>
         </div>
     </div>
 
     <div class="panel">
-        <h3 class="panel-title toggle-header" onclick="toggleNewPostForm()" id="newPostHeader">
+        <h3 class="panel-title toggle-header" onclick="toggleElement('newPostFormWrapper')">
             <span>發起新討論</span>
-            <span class="toggle-icon" id="toggleIcon">▼</span>
+            <span class="toggle-icon">▼</span>
         </h3>
-        
         <div id="newPostFormWrapper" style="display: none; padding-top: 24px;">
             <div class="form-group">
                 <label>發文類型 (必選)</label>
                 <select id="p_postType" onchange="toggleInfoBox()">
-                    <option value="敲碗">🙋‍♂️ 敲碗 (開發、教學、課程需求)</option>
-                    <option value="解惑">💡 解惑 (AI 使用與教學 QA)</option>
+                    <option value="敲碗">🙋‍♂️ 敲碗 (開發、教學需求)</option>
+                    <option value="解惑">💡 解惑 (AI 使用 QA)</option>
                 </select>
                 <div id="info_k" class="info-box">
-                    <strong>【敲碗說明】</strong>
-                    <p style="margin: 4px 0 0 0; color: var(--text-muted);">針對自身需求，邀請特洛伊幫忙開發，或提供專屬教學文章、影片與課程。</p>
-                    <ul>
-                        <li><strong>初階會員 (600元/月)</strong>：解鎖部落格會員，不限量、不限次數觀閱專屬文章。</li>
-                        <li><strong>進階會員 (6000元/年)</strong>：含初階福利，再解鎖「特洛伊AI賦能學院」不限量、不限時空觀看課程影音。</li>
-                    </ul>
+                    <strong>【敲碗說明】</strong>邀請特洛伊幫忙開發，或提供專屬教學文章、影片。
                 </div>
                 <div id="info_q" class="info-box" style="display: none;">
-                    <strong>【解惑說明】</strong>
-                    <p style="margin: 4px 0 0 0; color: var(--text-muted);">除上述敲碗需求外，關於一般 AI 使用、賦能、特洛伊教學的基本 QA 互動解答。</p>
+                    <strong>【解惑說明】</strong>關於一般 AI 使用、特洛伊教學的基本 QA 解答。
                 </div>
             </div>
-
-            <div class="form-group">
-                <label>暱稱 (必填)</label>
-                <input type="text" id="p_nickname" placeholder="您希望大家怎麼稱呼您？">
-            </div>
-
-            <div class="form-group">
-                <label>Email (必填，不公開，僅供留言通知使用)</label>
-                <input type="email" id="p_email" placeholder="例如：yourname@example.com">
-            </div>
-            
-            <div class="form-group">
-                <label>性別</label>
-                <select id="p_gender">
-                    <option value="不透露">不透露</option>
-                    <option value="男">男</option>
-                    <option value="女">女</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>職稱 (選填)</label>
-                <input type="text" id="p_job" placeholder="例如：系統工程師、創業者">
-            </div>
-
-            <div class="form-group">
-                <label>年齡</label>
-                <select id="p_age">
-                    <option value="不透露">不透露</option>
-                    <option value="20歲以下">20歲以下</option>
-                    <option value="21-30歲">21-30歲</option>
-                    <option value="31-40歲">31-40歲</option>
-                    <option value="41歲以上">41歲以上</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>居住地 (選填)</label>
-                <input type="text" id="p_location" placeholder="例如：台北市">
-            </div>
-
-            <div class="form-group">
-                <label>討論內容 (必填，支援外部網址自動轉連結)</label>
-                <textarea id="p_content" placeholder="請描述您遇上的痛點或想分享的資訊..."></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>附加圖片或影片 (將自動建檔至您的雲端專屬資料夾)</label>
-                <input type="file" id="p_files" multiple accept="image/*,video/*">
-            </div>
-
+            <div class="form-group"><label>暱稱</label><input type="text" id="p_nickname" placeholder="必填"></div>
+            <div class="form-group"><label>Email</label><input type="email" id="p_email" placeholder="必填，不公開"></div>
+            <div class="form-group"><label>性別</label><select id="p_gender"><option>不透露</option><option>男</option><option>女</option></select></div>
+            <div class="form-group"><label>職稱</label><input type="text" id="p_job" placeholder="選填"></div>
+            <div class="form-group"><label>年齡</label><select id="p_age"><option>不透露</option><option>20歲以下</option><option>21-30歲</option><option>31-40歲</option><option>41歲以上</option></select></div>
+            <div class="form-group"><label>居住地</label><input type="text" id="p_location" placeholder="選填"></div>
+            <div class="form-group"><label>討論內容</label><textarea id="p_content" placeholder="請描述..."></textarea></div>
+            <div class="form-group"><label>附加檔案</label><input type="file" id="p_files" multiple accept="image/*,video/*"></div>
             <button id="btnSubmitPost" onclick="submitPost()">發佈文章</button>
         </div>
     </div>
 
-    <div id="loadingMsg" class="system-msg">正在與資料庫進行無縫連線中...</div>
+    <div id="loadingMsg" class="system-msg">與資料庫無縫連線中...</div>
     <div id="postsContainer"></div>
     <div id="pagination-container"></div>
 </div>
 
 <script>
-    // 🚨 這是你的 GAS 網址，請確認沒有變動！
-    const API_URL = 'https://script.google.com/macros/s/AKfycbzj7cO_mI_QaEAqPU8zEV8o-hKhRxbtOy3gnqbcUK9Din_EZYeK4ISlDAuPEILHwsVy6Q/exec'; 
+    // 🚨 這是你新的 GAS 網址，請確認替換！
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzfiLSTcVpfO52-nwliC0TO0SQcyjQSJDpqyTqzMVXxbYNRwCnyX8To6oF3ebRmMIewgw/exec'; 
     let allData = [];
-
-    // 分頁與過濾器狀態變數
     let currentSearchQuery = '';
     let currentType = '全部';
-    let currentDate = ''; // 🆕 改為空字串，儲存 YYYY-MM-DD
+    let currentDate = ''; 
     let currentPage = 1;
     const postsPerPage = 5;
 
     window.onload = loadPosts;
 
-    function toggleNewPostForm() {
-        const wrapper = document.getElementById('newPostFormWrapper');
-        const icon = document.getElementById('toggleIcon');
-        const header = document.getElementById('newPostHeader');
-        
-        if (wrapper.style.display === 'none') {
-            wrapper.style.display = 'block';
-            icon.innerText = '▲';
-            header.style.borderBottom = '1px dashed var(--glass-border)';
-            header.style.paddingBottom = '16px';
-        } else {
-            wrapper.style.display = 'none';
-            icon.innerText = '▼';
-            header.style.borderBottom = 'none';
-            header.style.paddingBottom = '0';
-        }
+    function toggleElement(id) {
+        const el = document.getElementById(id);
+        el.style.display = el.style.display === 'none' ? 'block' : 'none';
     }
 
     function toggleInfoBox() {
         const type = document.getElementById('p_postType').value;
-        if (type === '敲碗') {
-            document.getElementById('info_k').style.display = 'block';
-            document.getElementById('info_q').style.display = 'none';
-        } else {
-            document.getElementById('info_k').style.display = 'none';
-            document.getElementById('info_q').style.display = 'block';
-        }
+        document.getElementById('info_k').style.display = type === '敲碗' ? 'block' : 'none';
+        document.getElementById('info_q').style.display = type === '敲碗' ? 'none' : 'block';
     }
 
     async function loadPosts() {
         document.getElementById('loadingMsg').style.display = 'block';
         try {
-            const cacheBuster = new Date().getTime();
-            const res = await fetch(`${API_URL}?action=getPosts&t=${cacheBuster}`);
+            const res = await fetch(`${API_URL}?action=getPosts&t=${new Date().getTime()}`);
             const data = await res.json();
-            
             if (data.error) throw new Error(data.error);
             allData = data;
-            
             document.getElementById('filterSection').style.display = 'block';
             renderTypeFilter();
             renderPosts();
@@ -392,165 +216,113 @@
     }
 
     function renderTypeFilter() {
-        const container = document.getElementById('type-container');
-        container.innerHTML = '';
-        const options = ['全部', '解惑', '敲碗'];
-        
-        options.forEach(opt => {
+        const container = document.getElementById('type-container'); container.innerHTML = '';
+        ['全部', '解惑', '敲碗'].forEach(opt => {
             const btn = document.createElement('button');
             btn.className = opt === currentType ? 'cat-btn active' : 'cat-btn';
             btn.innerText = opt;
-            btn.onclick = () => {
-                currentType = opt;
-                currentPage = 1;
-                renderTypeFilter();
-                renderPosts();
-            };
+            btn.onclick = () => { currentType = opt; currentPage = 1; renderTypeFilter(); renderPosts(); };
             container.appendChild(btn);
         });
     }
 
-    // 🆕 當使用者選擇精確日期時觸發
-    function handleDateChange() {
-        currentDate = document.getElementById('datePicker').value; // 取得 YYYY-MM-DD
-        currentPage = 1;
-        renderPosts();
-    }
-
-    // 🆕 當使用者點擊「清除日期」時觸發
-    function clearDateFilter() {
-        document.getElementById('datePicker').value = '';
-        currentDate = '';
-        currentPage = 1;
-        renderPosts();
-    }
-
-    // 🆕 輔助函式：將時間戳記轉為 YYYY-MM-DD 以便精確比對
+    function handleDateChange() { currentDate = document.getElementById('datePicker').value; currentPage = 1; renderPosts(); }
+    function clearDateFilter() { document.getElementById('datePicker').value = ''; currentDate = ''; currentPage = 1; renderPosts(); }
+    
     function getYYYYMMDD(dateStr) {
         try {
             const d = new Date(dateStr);
             if (isNaN(d.getTime())) return '';
-            const month = String(d.getMonth() + 1).padStart(2, '0');
-            const day = String(d.getDate()).padStart(2, '0');
-            return `${d.getFullYear()}-${month}-${day}`;
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         } catch(e) { return ''; }
     }
 
-    // 關鍵字搜尋處理
-    function filterPosts() {
-        currentSearchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
-        currentPage = 1;
-        renderPosts();
-    }
+    function filterPosts() { currentSearchQuery = document.getElementById('searchInput').value.toLowerCase().trim(); currentPage = 1; renderPosts(); }
 
-    // 整合搜尋、過濾與分頁的渲染邏輯
     function renderPosts() {
-        const container = document.getElementById('postsContainer');
-        const paginationContainer = document.getElementById('pagination-container');
-        container.innerHTML = '';
-        paginationContainer.innerHTML = '';
-        document.getElementById('loadingMsg').style.display = 'none';
+        const container = document.getElementById('postsContainer'); const paginationContainer = document.getElementById('pagination-container');
+        container.innerHTML = ''; paginationContainer.innerHTML = ''; document.getElementById('loadingMsg').style.display = 'none';
 
         let filtered = allData;
+        if (currentSearchQuery) filtered = filtered.filter(p => (p.nickname && p.nickname.toLowerCase().includes(currentSearchQuery)) || (p.content && p.content.toLowerCase().includes(currentSearchQuery)) || (p.postType && p.postType.toLowerCase().includes(currentSearchQuery)));
+        if (currentType !== '全部') filtered = filtered.filter(p => p.postType === currentType);
+        if (currentDate) filtered = filtered.filter(p => getYYYYMMDD(p.timestamp) === currentDate);
 
-        // 1. 第一層過濾 (關鍵字搜尋)
-        if (currentSearchQuery) {
-            filtered = filtered.filter(p => 
-                (p.nickname && p.nickname.toLowerCase().includes(currentSearchQuery)) || 
-                (p.content && p.content.toLowerCase().includes(currentSearchQuery)) ||
-                (p.jobTitle && p.jobTitle.toLowerCase().includes(currentSearchQuery)) ||
-                (p.postType && p.postType.toLowerCase().includes(currentSearchQuery))
-            );
-        }
+        if (filtered.length === 0) return container.innerHTML = '<div class="system-msg">目前還沒有討論喔！</div>';
 
-        // 2. 第二層過濾 (討論類型)
-        if (currentType !== '全部') {
-            filtered = filtered.filter(p => p.postType === currentType);
-        }
-
-        // 3. 第三層過濾 (🆕 精確的 年月日 比對)
-        if (currentDate) {
-            filtered = filtered.filter(p => getYYYYMMDD(p.timestamp) === currentDate);
-        }
-
-        if (filtered.length === 0) {
-            container.innerHTML = '<div class="system-msg">這個條件下目前還沒有討論喔！</div>';
-            return;
-        }
-
-        // 4. 分頁切片邏輯
         const totalPages = Math.ceil(filtered.length / postsPerPage);
-        const startIndex = (currentPage - 1) * postsPerPage;
-        const endIndex = startIndex + postsPerPage;
-        const postsToShow = filtered.slice(startIndex, endIndex);
+        const postsToShow = filtered.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage);
 
-        // 渲染切片後的文章
         postsToShow.forEach(post => {
             let mediaHtml = '';
             if (post.media && post.media.length > 0) {
                 post.media.forEach(m => {
-                    if (m.isAutoVideo) {
-                        mediaHtml += `<iframe src="https://drive.google.com/file/d/${m.id}/preview" allowfullscreen></iframe>`;
-                    } else {
-                        mediaHtml += `<img src="https://lh3.googleusercontent.com/d/${m.id}" alt="${m.name}">`;
-                    }
+                    if (m.isAutoVideo) mediaHtml += `<iframe src="https://drive.google.com/file/d/${m.id}/preview" allowfullscreen></iframe>`;
+                    else mediaHtml += `<img src="https://lh3.googleusercontent.com/d/${m.id}" alt="${m.name}">`; // Fixed string literal issue
                 });
             }
 
-            let repliesHtml = '';
-            post.replies.forEach(r => {
-                repliesHtml += `
-                    <div class="reply-item">
-                        <div class="reply-header">
-                            <span class="reply-name">${r.nickname}</span>
-                            ${r.jobTitle !== '不透露' ? `<span class="badge job" style="padding:2px 6px; font-size:0.7rem;">${r.jobTitle}</span>` : ''}
-                            <span class="reply-time">${formatDate(r.timestamp)}</span>
+            // 🌟 處理留言區塊的 HTML 生成
+            let commentsHtml = '';
+            post.comments.forEach(c => {
+                let repliesHtml = '';
+                if (c.replies.length > 0) {
+                    c.replies.forEach(r => repliesHtml += `<div class="nested-reply-item">${linkify(escapeAndBr(r))}</div>`);
+                }
+                
+                commentsHtml += `
+                    <div class="comment-item">
+                        <div class="comment-text">${linkify(escapeAndBr(c.main))}</div>
+                        
+                        <div style="display:flex; gap:10px; margin-top:8px;">
+                            ${c.replies.length > 0 ? `<button class="btn-interact" style="padding:4px 8px; font-size:0.85rem;" onclick="toggleElement('replies-${post.postID}-${c.colIndex}')">🔽 展開回覆 (${c.replies.length})</button>` : ''}
+                            <button class="btn-interact" style="padding:4px 8px; font-size:0.85rem;" onclick="toggleElement('reply-form-${post.postID}-${c.colIndex}')">💬 回覆此樓</button>
                         </div>
-                        <div class="reply-content">${linkify(escapeHtml(r.content))}</div>
+                        
+                        <div id="replies-${post.postID}-${c.colIndex}" class="nested-replies" style="display:none;">${repliesHtml}</div>
+                        
+                        <div id="reply-form-${post.postID}-${c.colIndex}" class="mini-input-group" style="display:none; background:#f1f5f9; padding:12px; border-radius:8px;">
+                            <input type="email" id="email_${post.postID}_${c.colIndex}" class="mini-input" placeholder="您的 Email (必填)">
+                            <textarea id="content_${post.postID}_${c.colIndex}" class="mini-input" placeholder="回覆內容... (必填)" style="min-height:50px;"></textarea>
+                            <button class="btn-small" onclick="submitInteraction('${post.postID}', 'reply', ${c.colIndex}, this)">送出回覆</button>
+                        </div>
                     </div>
                 `;
             });
 
-            const typeBadge = post.postType ? `<span class="badge type-tag">${post.postType}</span>` : '';
-
             const html = `
                 <div class="panel">
                     <div class="post-header">
-                        <div class="post-author-row">
-                            <span class="post-author">${post.nickname}</span>
-                            <span class="post-time">${formatDate(post.timestamp)}</span>
-                        </div>
+                        <div class="post-author-row"><span class="post-author">${post.nickname}</span><span class="post-time">${formatDate(post.timestamp)}</span></div>
                         <div class="badges">
-                            ${typeBadge}
-                            ${post.gender !== '不透露' ? `<span class="badge">${post.gender}</span>` : ''}
+                            <span class="badge type-tag">${post.postType}</span>
                             ${post.jobTitle !== '不透露' ? `<span class="badge job">${post.jobTitle}</span>` : ''}
-                            ${post.age !== '不透露' ? `<span class="badge">${post.age}</span>` : ''}
-                            ${post.location !== '不透露' ? `<span class="badge">${post.location}</span>` : ''}
                         </div>
                     </div>
                     
-                    <div class="post-content">${linkify(escapeHtml(post.content))}</div>
+                    <div class="post-content">${linkify(escapeAndBr(post.content))}</div>
                     ${mediaHtml ? `<div class="media-box">${mediaHtml}</div>` : ''}
                     
-                    <button class="btn-reply" onclick="toggleReplyForm('${post.postID}')">參與討論 (${post.replies.length})</button>
+                    <div class="interaction-bar">
+                        <button class="btn-interact" onclick="toggleElement('plusone-${post.postID}')">👍 同問 / +1 (${post.plusOnes ? post.plusOnes.length : 0})</button>
+                        <button class="btn-interact" onclick="toggleElement('comments-${post.postID}')">💬 留言討論 (${post.comments ? post.comments.length : 0})</button>
+                    </div>
 
-                    <div class="replies-wrapper">
-                        ${repliesHtml}
+                    <div id="plusone-${post.postID}" class="mini-input-group" style="display:none; flex-direction:row; align-items:center;">
+                        <input type="email" id="p1_email_${post.postID}" class="mini-input" placeholder="輸入您的 Email 以支持 +1">
+                        <button class="btn-small" style="width:100px; margin-bottom:0;" onclick="submitInteraction('${post.postID}', 'plusOne', null, this)">確定 +1</button>
+                    </div>
+
+                    <div id="comments-${post.postID}" class="comments-wrapper" style="display:none;">
+                        ${commentsHtml}
                         
-                        <div id="reply-form-${post.postID}" style="display:none; margin-top:24px; padding-top:24px; border-top: 1px dashed var(--glass-border);">
-                            <div class="form-group">
-                                <label>您的暱稱</label>
-                                <input type="text" id="r_nickname_${post.postID}" placeholder="必填">
+                        <div style="margin-top:20px; border-top:2px solid var(--glass-border); padding-top:16px;">
+                            <strong style="color:var(--slate-blue);">新增主留言</strong>
+                            <div class="mini-input-group">
+                                <input type="email" id="email_${post.postID}_main" class="mini-input" placeholder="您的 Email (必填)">
+                                <textarea id="content_${post.postID}_main" class="mini-input" placeholder="寫下您的看法... (必填)" style="min-height:80px;"></textarea>
+                                <button onclick="submitInteraction('${post.postID}', 'main', null, this)">送出留言</button>
                             </div>
-                            <div class="form-group">
-                                <label>職稱 (選填)</label>
-                                <input type="text" id="r_job_${post.postID}" placeholder="選填">
-                            </div>
-                            <div class="form-group">
-                                <label>回覆內容</label>
-                                <textarea id="r_content_${post.postID}" placeholder="寫下您的見解... (必填)" style="min-height: 100px;"></textarea>
-                            </div>
-                            <button onclick="submitReply('${post.postID}')">送出回覆</button>
                         </div>
                     </div>
                 </div>
@@ -558,173 +330,92 @@
             container.innerHTML += html;
         });
 
-        if (totalPages > 1) {
-            renderPagination(totalPages, paginationContainer);
-        }
+        if (totalPages > 1) renderPagination(totalPages, paginationContainer);
     }
 
     function renderPagination(totalPages, container) {
-        const paginationDiv = document.createElement('div');
-        paginationDiv.className = 'pagination';
-
-        const prevBtn = document.createElement('button');
-        prevBtn.className = 'page-btn';
-        prevBtn.innerText = '上一頁';
-        prevBtn.disabled = currentPage === 1;
-        prevBtn.onclick = () => {
-            if (currentPage > 1) {
-                currentPage--;
-                renderPosts();
-                scrollToList();
-            }
-        };
-        paginationDiv.appendChild(prevBtn);
-
         for (let i = 1; i <= totalPages; i++) {
-            const pageBtn = document.createElement('button');
-            pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-            pageBtn.innerText = i;
-            pageBtn.onclick = () => {
-                currentPage = i;
-                renderPosts();
-                scrollToList();
-            };
-            paginationDiv.appendChild(pageBtn);
-        }
-
-        const nextBtn = document.createElement('button');
-        nextBtn.className = 'page-btn';
-        nextBtn.innerText = '下一頁';
-        nextBtn.disabled = currentPage === totalPages;
-        nextBtn.onclick = () => {
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderPosts();
-                scrollToList();
-            }
-        };
-        paginationDiv.appendChild(nextBtn);
-
-        container.appendChild(paginationDiv);
-    }
-
-
-    function scrollToList() {
-        const section = document.getElementById('filterSection');
-        if(section) {
-            // 改用 scrollIntoView，強迫瀏覽器將特定區塊滾動到畫面頂部
-            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const btn = document.createElement('button'); btn.className = `page-btn ${i === currentPage ? 'active' : ''}`; btn.innerText = i;
+            btn.onclick = () => { currentPage = i; renderPosts(); document.getElementById('filterSection').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+            container.appendChild(btn);
         }
     }
 
-    // --------------------------------------------------------
-    // 以下為完全保留之表單處理與 API 邏輯
-    // --------------------------------------------------------
+    // 🌟 處理發佈互動 (主文、+1、主留言、回覆)
+    async function submitInteraction(postID, type, colIndex, btnElement) {
+        let email = "", content = "", action = "";
+        let payload = { postID: postID };
 
-    function toggleReplyForm(id) {
-        const form = document.getElementById(`reply-form-${id}`);
-        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        if (type === 'plusOne') {
+            email = document.getElementById(`p1_email_${postID}`).value.trim();
+            if (!email) return alert("請輸入 Email 才能 +1 喔！");
+            payload.email = email; action = 'addPlusOne';
+        } else if (type === 'main') {
+            email = document.getElementById(`email_${postID}_main`).value.trim();
+            content = document.getElementById(`content_${postID}_main`).value.trim();
+            if (!email || !content) return alert("Email 與留言內容皆為必填！");
+            payload.email = email; payload.content = content; action = 'addComment';
+        } else if (type === 'reply') {
+            email = document.getElementById(`email_${postID}_${colIndex}`).value.trim();
+            content = document.getElementById(`content_${postID}_${colIndex}`).value.trim();
+            if (!email || !content) return alert("Email 與回覆內容皆為必填！");
+            payload.email = email; payload.content = content; payload.colIndex = colIndex; action = 'addComment';
+        }
+
+        btnElement.innerText = "傳送中..."; btnElement.disabled = true;
+
+        try {
+            await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: action, payload: payload }) });
+            await loadPosts(); // 重新載入更新畫面
+        } catch (e) {
+            alert("傳送失敗：" + e);
+            btnElement.innerText = "重新送出"; btnElement.disabled = false;
+        }
     }
 
     async function submitPost() {
-        const postType = document.getElementById('p_postType').value;
-        const email = document.getElementById('p_email').value.trim();
         const nickname = document.getElementById('p_nickname').value.trim();
+        const email = document.getElementById('p_email').value.trim();
         const content = document.getElementById('p_content').value.trim();
-        const fileInput = document.getElementById('p_files');
-        const btn = document.getElementById('btnSubmitPost');
-        
         if (!nickname || !email || !content) return alert("暱稱、Email 與討論內容為必填！");
         
-        btn.innerText = "封裝上傳中，請稍候...";
-        btn.disabled = true;
-
+        const btn = document.getElementById('btnSubmitPost');
+        btn.innerText = "封裝上傳中..."; btn.disabled = true;
         try {
-            const filesData = await processFiles(fileInput.files);
+            const filesData = await processFiles(document.getElementById('p_files').files);
             const payload = {
                 action: 'addPost',
                 payload: {
-                    postType: postType, email: email, nickname: nickname, 
-                    gender: document.getElementById('p_gender').value,
-                    jobTitle: document.getElementById('p_job').value || '不透露',
-                    age: document.getElementById('p_age').value,
-                    location: document.getElementById('p_location').value || '不透露',
+                    postType: document.getElementById('p_postType').value, email: email, nickname: nickname, 
+                    gender: document.getElementById('p_gender').value, jobTitle: document.getElementById('p_job').value || '不透露',
+                    age: document.getElementById('p_age').value, location: document.getElementById('p_location').value || '不透露',
                     content: content, files: filesData
                 }
             };
-            
-            await sendToServer(payload);
-            
-            document.getElementById('p_content').value = '';
-            document.getElementById('p_email').value = ''; 
-            document.getElementById('p_files').value = '';
-            
-            toggleNewPostForm();
-
-            await loadPosts(); 
-            window.scrollTo({ top: 0, behavior: 'smooth' }); 
-            
-        } catch (e) {
-            alert("發生錯誤：" + e);
-        } finally {
-            btn.innerText = "發佈文章";
-            btn.disabled = false;
-        }
-    }
-
-    async function submitReply(parentID) {
-        const nickname = document.getElementById(`r_nickname_${parentID}`).value.trim();
-        const content = document.getElementById(`r_content_${parentID}`).value.trim();
-        const btn = event.target;
-        
-        if (!nickname || !content) return alert("暱稱與回覆內容為必填！");
-        
-        btn.innerText = "傳送中...";
-        btn.disabled = true;
-
-        const payload = {
-            action: 'addPost',
-            payload: {
-                parentID: parentID, nickname: nickname,
-                jobTitle: document.getElementById(`r_job_${parentID}`).value.trim() || '不透露',
-                content: content, files: [] 
-            }
-        };
-        
-        try {
-            await sendToServer(payload);
-            await loadPosts(); 
-        } catch (e) {
-            alert("回覆失敗：" + e);
-        } finally {
-            btn.innerText = "送出回覆";
-            btn.disabled = false;
-        }
+            await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) });
+            document.getElementById('p_content').value = ''; document.getElementById('p_email').value = ''; document.getElementById('p_files').value = '';
+            toggleElement('newPostFormWrapper');
+            await loadPosts(); window.scrollTo({ top: 0, behavior: 'smooth' }); 
+        } catch (e) { alert("發生錯誤：" + e); } 
+        finally { btn.innerText = "發佈文章"; btn.disabled = false; }
     }
 
     async function processFiles(files) {
         let result = [];
         for (let i = 0; i < files.length; i++) {
-            const file = files[i];
             const base64 = await new Promise((resolve) => {
                 const reader = new FileReader();
                 reader.onload = () => resolve(reader.result.split(',')[1]);
-                reader.readAsDataURL(file);
+                reader.readAsDataURL(files[i]);
             });
-            result.push({ name: file.name, mimeType: file.type, base64: base64 });
+            result.push({ name: files[i].name, mimeType: files[i].type, base64: base64 });
         }
         return result;
     }
 
-    async function sendToServer(data) {
-        const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(data) });
-        const result = await res.json();
-        if (result.error) throw new Error(result.error);
-        return result;
-    }
-
     function escapeHtml(text) { return text.replace(/</g, "<").replace(/>/g, ">"); }
-    function linkify(text) { return text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>'); }
+    function escapeAndBr(text) { return escapeHtml(text).replace(/\n/g, '<br>'); }
+    function linkify(text) { return text.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank">$1</a>'); }
     function formatDate(dateStr) {
         try { const d = new Date(dateStr); return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; } catch(e){ return dateStr; }
     }
