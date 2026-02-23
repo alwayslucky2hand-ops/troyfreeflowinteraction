@@ -6,11 +6,20 @@
     <title>特洛伊敲碗解惑區</title>
     <style>
         :root {
-            --primary-yellow: #E1B12C; --primary-hover: #C89D26;      
-            --slate-blue: #708090; --accent-green: #619A86;        
-            --bg-pure: #FFFFFF; --text-dark: #333333;          
-            --text-muted: #64748b; --glass-border: #cbd5e1;        
-            --radius-soft: 12px; --space-xl: 40px; --danger-color: #e17055;
+            /* 🌟 根據 PDF 主視覺提取的色彩計畫 */
+            --primary-yellow: #F59E0B; /* 活力橘/琥珀色 (主要按鈕與強調) */
+            --primary-hover: #D97706;  /* 深橘色 (懸停狀態) */     
+            --slate-blue: #D1D5DB;     /* 淺灰白色 (用於標題、次要文字，在深色背景下高對比) */ 
+            --accent-green: #10B981;   /* 翡翠綠 (用於標籤) */        
+            --bg-pure: #111827;        /* 深邃黑灰 (網頁整體背景) */          
+            --panel-bg: #1F2937;       /* 深灰色 (區塊與卡片背景) */
+            --input-bg: #374151;       /* 鐵灰色 (輸入框與留言底色) */
+            --text-dark: #F9FAFB;      /* 近純白 (主要閱讀文字) */          
+            --text-muted: #9CA3AF;     /* 灰階 (說明文字) */ 
+            --glass-border: #4B5563;   /* 邊框色 */        
+            --radius-soft: 12px; 
+            --space-xl: 40px; 
+            --danger-color: #EF4444;   /* 警告紅 */
         }
         
         *, *::before, *::after { box-sizing: border-box; }
@@ -19,37 +28,37 @@
         .container { max-width: 640px; margin: 0 auto; padding-bottom: 60px; }
         h1, h2, h3, strong { font-weight: bold; color: var(--slate-blue); }
         .header { margin-bottom: 24px; padding-bottom: 10px; text-align: center; }
-        .header h1 { margin: 0 0 20px 0; font-size: 1.8rem; letter-spacing: 0.05em; }
+        .header h1 { margin: 0 0 20px 0; font-size: 1.8rem; letter-spacing: 0.05em; color: var(--text-dark); }
         
         /* 區塊面板 */
-        .panel { background: var(--bg-pure); border: 1px solid var(--glass-border); border-radius: var(--radius-soft); padding: 35px 30px; margin-bottom: 32px; }
+        .panel { background: var(--panel-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-soft); padding: 35px 30px; margin-bottom: 32px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5); }
         
         /* 輸入框樣式 */
         .search-box, .input-box, .form-group input, select, textarea { 
             width: 100%; padding: 14px 18px; border: 1px solid var(--glass-border); 
             border-radius: 8px; font-size: 1rem; color: var(--text-dark); 
-            background: #f8fafc; transition: all 0.3s ease; font-family: inherit; margin-bottom: 10px; 
+            background: var(--input-bg); transition: all 0.3s ease; font-family: inherit; margin-bottom: 10px; 
         }
         .search-box:focus, .input-box:focus, .form-group input:focus, select:focus, textarea:focus { 
-            outline: none; border-color: var(--primary-yellow); background: var(--bg-pure); box-shadow: 0 0 0 3px rgba(225, 177, 44, 0.2); 
+            outline: none; border-color: var(--primary-yellow); background: var(--panel-bg); box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2); 
         }
         textarea { min-height: 100px; resize: vertical; }
         
-        button { background: var(--primary-yellow); color: #ffffff; border: none; padding: 14px 28px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; width: 100%; transition: background 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 10px; }
+        button { background: var(--primary-yellow); color: #ffffff; border: none; padding: 14px 28px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; width: 100%; transition: background 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.3); margin-bottom: 10px; }
         button:hover { background: var(--primary-hover); transform: translateY(-1px); }
-        button:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; box-shadow: none; }
+        button:disabled { background: var(--glass-border); color: var(--text-muted); cursor: not-allowed; box-shadow: none; }
         
         /* 篩選區塊 */
-        .filter-section { background: var(--bg-pure); margin-bottom: 32px; padding: 24px; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); }
+        .filter-section { background: var(--panel-bg); margin-bottom: 32px; padding: 24px; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5); }
         .filter-title { margin-bottom: 12px; font-weight: bold; color: var(--slate-blue); font-size: 0.9em; letter-spacing: 0.05em; }
         .category-nav { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: nowrap; overflow-x: auto; }
-        .cat-btn { background: #f8fafc; color: var(--slate-blue); padding: 8px 18px; border-radius: 30px; border: 1px solid var(--glass-border); font-size: 0.95em; font-weight: normal; cursor: pointer; transition: all 0.2s; white-space: nowrap; margin-bottom: 0; box-shadow: none; width: auto; }
-        .cat-btn.active, .cat-btn:hover { background: var(--slate-blue); color: #ffffff; border-color: var(--slate-blue); transform: none; }
+        .cat-btn { background: var(--input-bg); color: var(--slate-blue); padding: 8px 18px; border-radius: 30px; border: 1px solid var(--glass-border); font-size: 0.95em; font-weight: normal; cursor: pointer; transition: all 0.2s; white-space: nowrap; margin-bottom: 0; box-shadow: none; width: auto; }
+        .cat-btn.active, .cat-btn:hover { background: var(--primary-yellow); color: #ffffff; border-color: var(--primary-yellow); transform: none; }
 
         /* 發文表單 UI */
         .form-group { display: flex; flex-direction: column; margin-bottom: 15px; }
         .form-group label { font-size: 0.95rem; font-weight: bold; color: var(--slate-blue); margin-bottom: 5px; }
-        .panel-title { margin: 0 0 24px 0; font-size: 1.3rem; border-bottom: 1px dashed var(--glass-border); padding-bottom: 16px; cursor: pointer; display: flex; justify-content: space-between; }
+        .panel-title { margin: 0 0 24px 0; font-size: 1.3rem; border-bottom: 1px dashed var(--glass-border); padding-bottom: 16px; cursor: pointer; display: flex; justify-content: space-between; color: var(--text-dark); }
         
         /* 內聯訊息 */
         .inline-msg { font-size: 0.9em; font-weight: bold; display: block; margin-top: 5px; min-height: 24px; }
@@ -59,34 +68,34 @@
         /* 文章卡片 */
         .post-header { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
         .post-author-row { display: flex; align-items: center; gap: 12px; }
-        .post-author { font-size: 1.3rem; font-weight: bold; color: var(--text-dark); }
-        .post-time { color: var(--slate-blue); font-size: 0.85rem; }
+        .post-author { font-size: 1.3rem; font-weight: bold; color: var(--primary-yellow); } /* 作者名字使用主題橘色強調 */
+        .post-time { color: var(--text-muted); font-size: 0.85rem; }
         .badges { display: flex; gap: 8px; }
         .badge { background: var(--accent-green); color: #ffffff; padding: 4px 12px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; }
         .badge.job { background: var(--primary-yellow); color: #ffffff; }
-        .badge.type-tag { background: var(--slate-blue); }
+        .badge.type-tag { background: var(--input-bg); color: var(--slate-blue); border: 1px solid var(--glass-border); }
         .post-content { font-size: 1.1rem; white-space: pre-wrap; margin-bottom: 20px; color: var(--text-dark); }
         
         /* 互動與留言區 */
         .interaction-bar { display: flex; gap: 10px; margin-top: 10px; border-top: 1px dashed var(--glass-border); padding-top: 20px; }
         .btn-interact { background: transparent; color: var(--slate-blue); border: 1px solid var(--glass-border); width: auto; padding: 8px 16px; font-size: 0.95rem; box-shadow: none; margin-bottom: 0; }
-        .btn-interact:hover { background: #f8fafc; color: var(--text-dark); border-color: var(--slate-blue); transform: none; }
+        .btn-interact:hover { background: var(--input-bg); color: var(--text-dark); border-color: var(--primary-yellow); transform: none; }
         
-        .btn-interact.active { background: var(--slate-blue); color: #ffffff; border-color: var(--slate-blue); }
-        .btn-interact.active:hover { background: var(--text-muted); color: #ffffff; }
+        .btn-interact.active { background: var(--primary-yellow); color: #ffffff; border-color: var(--primary-yellow); }
+        .btn-interact.active:hover { background: var(--primary-hover); color: #ffffff; }
 
-        .comments-wrapper { margin-top: 20px; background: #f8fafc; padding: 20px; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); }
-        .comment-item { background: #fff; padding: 16px; border-radius: 8px; margin-bottom: 16px; border-left: 4px solid var(--accent-green); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .comments-wrapper { margin-top: 20px; background: var(--input-bg); padding: 20px; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); }
+        .comment-item { background: var(--panel-bg); padding: 16px; border-radius: 8px; margin-bottom: 16px; border-left: 4px solid var(--primary-yellow); box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         .comment-text { font-size: 1rem; color: var(--text-dark); white-space: pre-wrap; word-break: break-word; }
         .nested-replies { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--glass-border); padding-left: 10px; }
-        .nested-reply-item { margin-bottom: 10px; font-size: 0.95rem; color: #475569; padding-left: 15px; border-left: 2px solid var(--glass-border); white-space: pre-wrap; }
+        .nested-reply-item { margin-bottom: 10px; font-size: 0.95rem; color: var(--slate-blue); padding-left: 15px; border-left: 2px solid var(--glass-border); white-space: pre-wrap; }
         
         .system-msg { text-align: center; color: var(--slate-blue); padding: 40px 20px; font-size: 1.1rem; font-weight: bold; }
         .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 30px; }
-        .page-btn { background: var(--bg-pure); color: var(--slate-blue); border: 1px solid var(--glass-border); padding: 8px 16px; border-radius: 6px; cursor: pointer; width: auto; margin-bottom: 0; box-shadow: none; }
-        .page-btn.active { background: var(--slate-blue); color: #ffffff; }
+        .page-btn { background: var(--panel-bg); color: var(--slate-blue); border: 1px solid var(--glass-border); padding: 8px 16px; border-radius: 6px; cursor: pointer; width: auto; margin-bottom: 0; box-shadow: none; }
+        .page-btn.active { background: var(--primary-yellow); color: #ffffff; border-color: var(--primary-yellow); }
 
-        .lock-mask { background: #f1f5f9; padding: 20px; text-align: center; border-radius: 8px; color: var(--slate-blue); border: 1px dashed var(--glass-border); margin-top: 15px; }
+        .lock-mask { background: var(--input-bg); padding: 20px; text-align: center; border-radius: 8px; color: var(--slate-blue); border: 1px dashed var(--glass-border); margin-top: 15px; }
 
         @media (max-width: 600px) { 
             #step-1, #step-2 div { flex-direction: column; align-items: stretch; }
@@ -107,7 +116,7 @@
         <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;">
             歡迎來到解惑區！請先輸入 Email 獲取驗證碼。登入後系統將自動記錄您的信箱，即可參與發文、留言與同問互動。未登入者僅可瀏覽文章標題與內容。
         </p>
-        <p id="login-status" style="color: var(--slate-blue); font-weight: bold; margin-bottom: 15px;">目前狀態：未登入</p>
+        <p id="login-status" style="color: var(--primary-yellow); font-weight: bold; margin-bottom: 15px;">目前狀態：未登入</p>
         
         <div id="step-1" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;">
             <input type="email" id="auth-email" class="input-box" placeholder="輸入 Email" style="flex: 2; max-width: 300px; margin-bottom: 0;">
@@ -119,7 +128,7 @@
             <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;">
                 <input type="text" id="otp-code" class="input-box" placeholder="輸入 6 位數驗證碼" style="flex: 2; max-width: 300px; margin-bottom: 0;">
                 <button onclick="verifyLogin()" id="btn-login" style="flex: 1; margin-bottom: 0; width: auto; min-width: 120px;">登入通行</button>
-                <button onclick="cancelLogin()" style="flex: 1; margin-bottom: 0; width: auto; min-width: 80px; background: #ffffff; color: var(--slate-blue); border: 1px solid var(--glass-border);">返回</button>
+                <button onclick="cancelLogin()" style="flex: 1; margin-bottom: 0; width: auto; min-width: 80px; background: var(--input-bg); color: var(--slate-blue); border: 1px solid var(--glass-border);">返回</button>
             </div>
             <span id="login-msg" class="inline-msg" style="width: 100%;"></span>
         </div>
@@ -137,13 +146,13 @@
         <div class="filter-title" style="margin-top: 10px;">發佈日期</div>
         <div style="display: flex; gap: 10px; align-items: center;">
             <input type="date" id="datePicker" class="input-box" style="width: auto; margin: 0;" onchange="handleDateChange()">
-            <button onclick="clearDateFilter()" class="cat-btn" style="background: #ffffff;">清除</button>
+            <button onclick="clearDateFilter()" class="cat-btn" style="background: var(--input-bg);">清除</button>
         </div>
     </div>
 
     <div class="panel" id="post-panel" style="display: none;">
         <h3 class="panel-title" onclick="toggleElement('newPostFormWrapper')">
-            <span>發起新討論</span><span>▼</span>
+            <span>發起新討論</span><span style="color: var(--primary-yellow);">▼</span>
         </h3>
         <div id="newPostFormWrapper" style="display: none;">
             <div class="form-group">
@@ -260,19 +269,19 @@
     
     function filterPosts() { currentSearchQuery = document.getElementById('searchInput').value.toLowerCase().trim(); currentPage = 1; renderPosts(); }
 
-    // 🌟 解析並格式化留言內容 (套用部落格的美化排版)
+    // 🌟 解析並格式化留言內容
     function formatCommentDisplay(str) {
         const match = str.match(/^(\[\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}\]【.*?】)(.*)/s);
         if (match) {
             const header = escapeHtml(match[1]);
             const body = linkify(escapeAndBr(match[2].replace(/^\s+/, '')));
-            return `<div style="font-weight:bold; color:var(--slate-blue); font-size:0.9rem; margin-bottom:4px;">${header}</div><div style="color:var(--text-dark);">${body}</div>`;
+            return `<div style="font-weight:bold; color:var(--primary-yellow); font-size:0.9rem; margin-bottom:4px;">${header}</div><div style="color:var(--text-dark);">${body}</div>`;
         } else {
             return `<div style="color:var(--text-dark);">${linkify(escapeAndBr(str))}</div>`;
         }
     }
 
-    // 🌟 獨立出產生該篇貼文留言區 HTML 的函式 (支援 5 則收合功能)
+    // 🌟 獨立出產生該篇貼文留言區 HTML 的函式
     function getCommentsHtml(post) {
         if (!post.comments || post.comments.length === 0) return '<p style="color: var(--slate-blue);">目前還沒有人留言，搶先發表看法吧！</p>';
         
@@ -339,14 +348,12 @@
 
         postsToShow.forEach(post => {
             let p1Count = post.plusOnes ? post.plusOnes.length : 0;
-            // 🌟 精確計算總留言數 (主留言 + 回覆)
             let totalCommentCount = post.comments ? post.comments.reduce((sum, c) => sum + 1 + (c.replies ? c.replies.length : 0), 0) : 0;
             
             let interactionHTML = '';
             if (!currentUserEmail) {
                 interactionHTML = `<div class="lock-mask">請先在上方完成登入，即可查看留言、回覆與同問。</div>`;
             } else {
-                // 🌟 更新 UI：文字變成純粹的 "+1" 或是 "已 +1"
                 const hasP1 = post.plusOnes && post.plusOnes.includes(currentUserEmail);
                 const p1BtnClass = hasP1 ? "btn-interact active" : "btn-interact";
                 const p1BtnText = hasP1 ? `已 +1 (${p1Count})` : `+1 (${p1Count})`;
@@ -391,7 +398,7 @@
         }
     }
 
-    // 🌟 樂觀更新 (瞬間回饋 UI) 核心邏輯
+    // 🌟 樂觀更新 (瞬間回饋 UI)
     function submitInteraction(postID, type, colIndex, btn) {
         if (!currentUserEmail) return alert("請先登入");
 
@@ -403,18 +410,15 @@
             let p1Arr = post.plusOnes || [];
             let hasP1 = p1Arr.includes(currentUserEmail);
             
-            // 瞬間更新前端數據
             if (hasP1) {
                 post.plusOnes = p1Arr.filter(e => e !== currentUserEmail);
             } else {
                 post.plusOnes.push(currentUserEmail);
             }
             
-            // 瞬間更新按鈕 UI
             btn.className = !hasP1 ? "btn-interact active" : "btn-interact";
             btn.innerText = !hasP1 ? `已 +1 (${post.plusOnes.length})` : `+1 (${post.plusOnes.length})`;
 
-            // 背景默默同步至後端
             fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'addPlusOne', payload: { postID, email: currentUserEmail } }) })
             .catch(e => console.error("同步失敗", e));
             return; 
@@ -430,11 +434,9 @@
 
         if (type === 'main') {
             if (!post.comments) post.comments = [];
-            // 使用 push 將留言往下疊加顯示
             post.comments.push({ colIndex: 'temp', main: newFormattedText, replies: [], isOptimistic: true });
             document.getElementById(`content_${postID}_main`).value = '';
             
-            // 如果剛好超過5則，確保隱藏區塊會打開，讓發佈者能看到自己的留言
             setTimeout(() => {
                 const hiddenWrapper = document.getElementById(`hidden-comments-${postID}`);
                 if (hiddenWrapper) {
@@ -452,7 +454,6 @@
             }
         }
 
-        // 瞬間重新渲染該貼文的「留言區 HTML」與「上方按鈕數字」
         document.getElementById(`comments-list-${postID}`).innerHTML = getCommentsHtml(post);
         const toggleBtn = document.getElementById(`btn-comment-toggle-${postID}`);
         let newTotalCount = post.comments.reduce((sum, c) => sum + 1 + (c.replies ? c.replies.length : 0), 0);
@@ -463,17 +464,14 @@
             if(form) form.style.display = 'none';
         }
 
-        // 背景默默發送至 Google Sheets
         fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'addComment', payload: { postID, email: currentUserEmail, content, colIndex: colIndex === 'temp' ? null : colIndex } }) })
         .then(() => {
-            // 發送完成後背景刷新資料庫取得真實的 colIndex，避免使用者連發時抓不到位置
             fetch(`${API_URL}?action=getPosts`).then(r=>r.json()).then(data => {
                 let updatedPost = data.find(p => p.postID === postID);
                 if (updatedPost) {
                     const expandedCols = post.comments.filter(c => c.showReplies).map(c => c.colIndex);
                     updatedPost.comments.forEach(c => { if (expandedCols.includes(c.colIndex)) c.showReplies = true; });
                     
-                    // 覆蓋原本的 post 物件並重繪
                     const postIndex = allData.findIndex(p => p.postID === postID);
                     allData[postIndex] = updatedPost;
                     document.getElementById(`comments-list-${postID}`).innerHTML = getCommentsHtml(updatedPost);
@@ -506,19 +504,15 @@
         finally { btn.innerText = "發佈文章"; btn.disabled = false; }
     }
 
-    // 🌟 全域點擊監聽器：點擊網頁其他地方自動收合回覆框與隱藏的留言
+    // 🌟 全域點擊監聽器
     document.addEventListener('click', function(e) {
-        // 如果點擊的位置不在按鈕、輸入框，且不在整個留言區塊內
         const isInsideCommentArea = e.target.closest('.comments-wrapper');
         const isToggleButton = e.target.closest('.btn-interact');
         const isInput = e.target.closest('.input-box');
 
         if (!isInsideCommentArea && !isToggleButton && !isInput) {
-            // 1. 關閉所有展開的隱藏留言，並顯示原本的「載入更多」按鈕
             document.querySelectorAll('.hidden-comments-wrapper').forEach(el => el.style.display = 'none');
             document.querySelectorAll('.btn-load-more').forEach(btn => btn.style.display = 'flex');
-            
-            // 2. 關閉所有的「回覆此樓」輸入框
             document.querySelectorAll('[id^="reply-form-"]').forEach(el => el.style.display = 'none');
         }
     });
