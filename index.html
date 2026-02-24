@@ -242,29 +242,34 @@
     function cancelLogin() { document.getElementById('step-1').style.display = 'flex'; document.getElementById('step-2').style.display = 'none'; }
     function logout() { currentUserEmail = ''; document.getElementById('auth-email').value = ''; document.getElementById('otp-code').value = ''; document.getElementById('login-status').innerText = '目前狀態：未登入'; document.getElementById('step-1').style.display = 'flex'; document.getElementById('logout-btn-container').style.display = 'none'; document.getElementById('post-panel').style.display = 'none'; renderPosts(); }
 
-    // --- 載入與渲染 (🌟 已加入錯誤攔截機制) ---
+    // --- 載入與渲染 ---
     async function loadPosts() {
         try {
             const res = await fetch(`${API_URL}?action=getPosts&t=${new Date().getTime()}`);
             const data = await res.json();
             
-            // 🌟 新增：檢查後端是否回傳了錯誤訊息
             if (data.error) {
                 console.error("後端回傳錯誤：", data.error);
                 document.getElementById('loadingMsg').innerText = "載入失敗，後端錯誤：" + data.error;
                 document.getElementById('loadingMsg').style.color = 'var(--danger-color)';
-                return; // 終止程式，不執行後續的 filter
+                return;
             }
             
-            // 🌟 新增：確保資料真的是陣列
             if (!Array.isArray(data)) {
                 console.error("資料格式異常：", data);
                 document.getElementById('loadingMsg').innerText = "載入失敗：取得的資料格式不正確，請檢查 GAS 後端。";
                 document.getElementById('loadingMsg').style.color = 'var(--danger-color)';
-                return; // 終止程式
+                return;
             }
 
-            allData = data;
+            // 🌟 強制將後端傳來的倒序留言反轉回來，確保順序是「舊到新 (由上到下顯示)」
+            allData = data.map(post => {
+                if (post.comments && Array.isArray(post.comments)) {
+                    post.comments.reverse();
+                }
+                return post;
+            });
+
             document.getElementById('loadingMsg').style.display = 'none';
             document.getElementById('filterSection').style.display = 'block';
             renderTypeFilter();
@@ -310,6 +315,11 @@
         let hiddenHtml = '';
         let hiddenCount = 0;
 
+        // 🌟 重新定義隱藏邏輯：當超過 5 筆時，隱藏最上方（最舊）的留言，保留下方最新 5 筆
+        const totalComments = post.comments.length;
+        const showLimit = 5;
+        const hiddenLimit = Math.max(0, totalComments - showLimit);
+
         post.comments.forEach((c, index) => {
             let repliesHtml = '';
             if (c.replies && c.replies.length > 0) {
@@ -334,22 +344,27 @@
                     </div>
                 </div>`;
 
-            if (index < 5) visibleHtml += itemHtml;
-            else { 
-                hiddenHtml += itemHtml; 
-                hiddenCount += (1 + (c.replies ? c.replies.length : 0)); 
+            // 🌟 判斷：若索引小於 hiddenLimit，代表這是舊的留言，要藏起來
+            if (index < hiddenLimit) {
+                hiddenHtml += itemHtml;
+                hiddenCount += (1 + (c.replies ? c.replies.length : 0));
+            } else {
+                visibleHtml += itemHtml;
             }
         });
 
-        let finalHtml = visibleHtml;
+        let finalHtml = '';
+        // 🌟 如果有隱藏的留言，將「載入較舊留言」按鈕放在最上方
         if (hiddenHtml !== '') {
             finalHtml += `
-                <div id="hidden-comments-${post.postID}" class="hidden-comments-wrapper" style="display:none;">${hiddenHtml}</div>
-                <button class="btn-interact btn-load-more" id="btn-load-more-${post.postID}" style="width:100%; justify-content:center; margin-top:10px;" onclick="document.getElementById('hidden-comments-${post.postID}').style.display='block'; this.style.display='none';">
-                    載入更多留言 (隱藏 ${hiddenCount} 則紀錄)
+                <button class="btn-interact btn-load-more" id="btn-load-more-${post.postID}" style="width:100%; justify-content:center; margin-bottom:15px;" onclick="document.getElementById('hidden-comments-${post.postID}').style.display='block'; this.style.display='none';">
+                    載入較舊的留言 (隱藏 ${hiddenCount} 則紀錄)
                 </button>
+                <div id="hidden-comments-${post.postID}" class="hidden-comments-wrapper" style="display:none; margin-bottom:15px;">${hiddenHtml}</div>
             `;
         }
+        // 將顯示中的新留言接在下方
+        finalHtml += visibleHtml;
         return finalHtml;
     }
 
@@ -455,6 +470,7 @@
 
         if (type === 'main') {
             if (!post.comments) post.comments = [];
+            // 新增時也是推到陣列最尾端 (也就是最下方)
             post.comments.push({ colIndex: 'temp', main: newFormattedText, replies: [], isOptimistic: true });
             document.getElementById(`content_${postID}_main`).value = '';
             
@@ -490,6 +506,11 @@
             fetch(`${API_URL}?action=getPosts`).then(r=>r.json()).then(data => {
                 let updatedPost = data.find(p => p.postID === postID);
                 if (updatedPost) {
+                    // 🌟 同步資料庫最新資訊時，也確保陣列倒轉回正確順序
+                    if (updatedPost.comments && Array.isArray(updatedPost.comments)) {
+                        updatedPost.comments.reverse();
+                    }
+
                     const expandedCols = post.comments.filter(c => c.showReplies).map(c => c.colIndex);
                     updatedPost.comments.forEach(c => { if (expandedCols.includes(c.colIndex)) c.showReplies = true; });
                     
