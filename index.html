@@ -180,7 +180,7 @@
 
 <script>
     // 🚨 替換為你的 GAS 網址
-    const API_URL = 'https://script.google.com/macros/s/AKfycbzKPA6WGVaazXXMhknjCBuiCGpfur0J9IwSScgGNBwCfqNqagJ3JlXSSbFxgDOpuqQW/exec'; 
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxgsaeq1JkpU-02sSVqfJPdktMzM0OaqVbBh1YzkPWSu-he3WtSUb1c8PxngJLNITT4/exec'; 
     let allData = [];
     let currentUserEmail = ''; 
     let currentSearchQuery = '';
@@ -242,17 +242,38 @@
     function cancelLogin() { document.getElementById('step-1').style.display = 'flex'; document.getElementById('step-2').style.display = 'none'; }
     function logout() { currentUserEmail = ''; document.getElementById('auth-email').value = ''; document.getElementById('otp-code').value = ''; document.getElementById('login-status').innerText = '目前狀態：未登入'; document.getElementById('step-1').style.display = 'flex'; document.getElementById('logout-btn-container').style.display = 'none'; document.getElementById('post-panel').style.display = 'none'; renderPosts(); }
 
-    // --- 載入與渲染 ---
+    // --- 載入與渲染 (🌟 已加入錯誤攔截機制) ---
     async function loadPosts() {
         try {
             const res = await fetch(`${API_URL}?action=getPosts&t=${new Date().getTime()}`);
             const data = await res.json();
+            
+            // 🌟 新增：檢查後端是否回傳了錯誤訊息
+            if (data.error) {
+                console.error("後端回傳錯誤：", data.error);
+                document.getElementById('loadingMsg').innerText = "載入失敗，後端錯誤：" + data.error;
+                document.getElementById('loadingMsg').style.color = 'var(--danger-color)';
+                return; // 終止程式，不執行後續的 filter
+            }
+            
+            // 🌟 新增：確保資料真的是陣列
+            if (!Array.isArray(data)) {
+                console.error("資料格式異常：", data);
+                document.getElementById('loadingMsg').innerText = "載入失敗：取得的資料格式不正確，請檢查 GAS 後端。";
+                document.getElementById('loadingMsg').style.color = 'var(--danger-color)';
+                return; // 終止程式
+            }
+
             allData = data;
             document.getElementById('loadingMsg').style.display = 'none';
             document.getElementById('filterSection').style.display = 'block';
             renderTypeFilter();
             renderPosts();
-        } catch (e) { document.getElementById('loadingMsg').innerText = "載入失敗：" + e.message; }
+        } catch (e) { 
+            console.error("前端載入例外錯誤：", e);
+            document.getElementById('loadingMsg').innerText = "連線失敗：" + e.message; 
+            document.getElementById('loadingMsg').style.color = 'var(--danger-color)';
+        }
     }
 
     function renderTypeFilter() {
