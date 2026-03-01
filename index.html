@@ -2,153 +2,180 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>特洛伊敲碗解惑區</title>
     <style>
         :root {
-            /* 🌟 色彩計畫更新：亮白底色 + 橘色點綴 + 深灰鐵灰框架 */
-            --primary-yellow: #F59E0B; /* 活力橘/琥珀色 (主要按鈕與強調) */
-            --primary-hover: #D97706;  /* 深橘色 (懸停狀態) */     
-            --slate-blue: #1F2937;     /* 鐵灰色 (用於標題、按鈕外框、Hover狀態) */ 
-            --accent-green: #10B981;   /* 翡翠綠 (用於標籤) */        
-            --bg-pure: #FFFFFF;        /* 亮白底色 (網頁整體背景) */          
-            --panel-bg: #FFFFFF;       /* 區塊背景 */
-            --input-bg: #F8FAFC;       /* 極淺灰 (輸入框與留言底色) */
-            --text-dark: #111827;      /* 深黑灰 (主要閱讀文字，高對比易讀) */          
-            --text-muted: #6B7280;     /* 灰階 (說明文字) */ 
-            --glass-border: #CBD5E1;   /* 淺灰邊框色 (區塊外框) */        
-            --radius-soft: 12px; 
-            --space-xl: 40px; 
-            --danger-color: #EF4444;   /* 警告紅 */
+            /* 🌟 色彩計畫：亮白底色 + 橘色點綴 + 深灰鐵灰框架 */
+            --primary-yellow: #F59E0B; 
+            --primary-hover: #D97706;      
+            --slate-blue: #1F2937;     
+            --accent-green: #10B981;        
+            --bg-pure: #F3F4F6; /* 改為淺灰色，讓區塊卡片能跳出來 */          
+            --panel-bg: #FFFFFF;       
+            --input-bg: #F8FAFC;       
+            --text-dark: #111827;          
+            --text-muted: #6B7280;     
+            --glass-border: #E2E8F0;       
+            --radius-soft: 16px; /* 統一加大圓角，更具 App 質感 */
+            --space-xl: 30px; 
+            --danger-color: #EF4444;   
         }
         
         *, *::before, *::after { box-sizing: border-box; }
         
-        body { font-family: 'Microsoft JhengHei', sans-serif; background: var(--bg-pure); color: var(--text-dark); margin: 0; padding: var(--space-xl) 20px; line-height: 1.8; }
-        .container { max-width: 640px; margin: 0 auto; padding-bottom: 60px; }
-        h1, h2, h3, strong { font-weight: bold; color: var(--slate-blue); }
-        .header { margin-bottom: 24px; padding-bottom: 10px; text-align: center; }
-        .header h1 { margin: 0 0 20px 0; font-size: 1.8rem; letter-spacing: 0.05em; color: var(--text-dark); }
+        html { background: var(--bg-pure); }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Microsoft JhengHei', sans-serif; 
+            background: var(--bg-pure); 
+            color: var(--text-dark); 
+            margin: 0 auto; 
+            padding: 20px 15px; 
+            line-height: 1.6; 
+            max-width: 500px; /* 鎖定 App 寬度 */
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05); /* 電腦版立體陰影 */
+            background-color: var(--bg-pure);
+            -webkit-font-smoothing: antialiased; 
+        }
+        
+        h1, h2, h3, strong { font-weight: bold; color: var(--slate-blue); margin-bottom: 12px; }
+        .header { margin-bottom: 24px; text-align: center; }
+        .header h1 { margin: 10px 0 20px 0; font-size: 1.6rem; letter-spacing: 0.05em; color: var(--text-dark); }
         
         /* 區塊面板 */
-        .panel { background: var(--panel-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-soft); padding: 35px 30px; margin-bottom: 32px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); }
+        .panel { 
+            background: var(--panel-bg); 
+            border: 1px solid var(--glass-border); 
+            border-radius: var(--radius-soft); 
+            padding: 24px 20px; 
+            margin-bottom: 20px; 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03); 
+        }
         
-        /* 輸入框樣式 */
+        /* 輸入框與表單全寬堆疊 */
         .search-box, .input-box, .form-group input, select, textarea { 
-            width: 100%; padding: 14px 18px; border: 1px solid var(--glass-border); 
-            border-radius: 8px; font-size: 1rem; color: var(--text-dark); 
-            background: var(--input-bg); transition: all 0.3s ease; font-family: inherit; margin-bottom: 10px; 
+            width: 100%; padding: 14px 16px; border: 1px solid var(--glass-border); 
+            border-radius: 10px; font-size: 16px !important; color: var(--text-dark); 
+            background: var(--input-bg); transition: all 0.3s ease; font-family: inherit; margin-bottom: 12px; 
         }
         .search-box:focus, .input-box:focus, .form-group input:focus, select:focus, textarea:focus { 
-            outline: none; border-color: var(--primary-yellow); background: var(--bg-pure); box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2); 
+            outline: none; border-color: var(--primary-yellow); background: var(--panel-bg); box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2); 
         }
         textarea { min-height: 100px; resize: vertical; }
         
-        button { background: var(--primary-yellow); color: #ffffff; border: none; padding: 14px 28px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; width: 100%; transition: background 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 10px; }
-        button:hover { background: var(--primary-hover); transform: translateY(-1px); }
-        button:disabled { background: #E5E7EB; color: var(--text-muted); cursor: not-allowed; box-shadow: none; }
+        /* 滿版按鈕設計 */
+        button { 
+            background: var(--primary-yellow); color: #ffffff; border: none; 
+            padding: 16px 20px; border-radius: 10px; font-weight: bold; font-size: 1.05rem; 
+            cursor: pointer; width: 100%; transition: all 0.2s; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.25); 
+            margin-bottom: 12px; display: flex; justify-content: center; align-items: center;
+        }
+        button:hover { background: var(--primary-hover); transform: translateY(-2px); }
+        button:disabled { background: #E5E7EB; color: var(--text-muted); cursor: not-allowed; box-shadow: none; transform: none; }
+        .btn-outline { background: var(--input-bg); color: var(--slate-blue); border: 1px solid var(--glass-border); box-shadow: none; }
         
         /* 篩選區塊 */
-        .filter-section { background: var(--panel-bg); margin-bottom: 32px; padding: 24px; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); }
-        .filter-title { margin-bottom: 12px; font-weight: bold; color: var(--slate-blue); font-size: 0.9em; letter-spacing: 0.05em; }
-        .category-nav { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: nowrap; overflow-x: auto; }
-        .cat-btn { background: var(--input-bg); color: var(--text-muted); padding: 8px 18px; border-radius: 30px; border: 1px solid var(--glass-border); font-size: 0.95em; font-weight: bold; cursor: pointer; transition: all 0.2s; white-space: nowrap; margin-bottom: 0; box-shadow: none; width: auto; }
+        .filter-section { background: var(--panel-bg); margin-bottom: 24px; padding: 20px; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03); }
+        .filter-title { margin-bottom: 10px; font-weight: bold; color: var(--slate-blue); font-size: 0.9em; letter-spacing: 0.05em; }
+        .category-nav { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 5px; }
+        .category-nav::-webkit-scrollbar { display: none; }
+        .cat-btn { background: var(--input-bg); color: var(--text-muted); padding: 10px 18px; border-radius: 30px; border: 1px solid var(--glass-border); font-size: 0.9em; font-weight: bold; cursor: pointer; transition: all 0.2s; white-space: nowrap; margin-bottom: 0; box-shadow: none; width: auto; flex-shrink: 0; }
         .cat-btn.active, .cat-btn:hover { background: var(--primary-yellow); color: #ffffff; border-color: var(--primary-yellow); transform: none; }
 
         /* 發文表單 UI */
-        .form-group { display: flex; flex-direction: column; margin-bottom: 15px; }
-        .form-group label { font-size: 0.95rem; font-weight: bold; color: var(--slate-blue); margin-bottom: 5px; }
-        .panel-title { margin: 0 0 24px 0; font-size: 1.3rem; border-bottom: 1px dashed var(--glass-border); padding-bottom: 16px; cursor: pointer; display: flex; justify-content: space-between; color: var(--slate-blue); }
+        .form-group { display: flex; flex-direction: column; margin-bottom: 16px; width: 100%; }
+        .form-group label { font-size: 0.95rem; font-weight: bold; color: var(--slate-blue); margin-bottom: 8px; }
+        .panel-title { margin: 0 0 20px 0; font-size: 1.25rem; border-bottom: 1px dashed var(--glass-border); padding-bottom: 16px; cursor: pointer; display: flex; justify-content: space-between; color: var(--slate-blue); }
         
         /* 內聯訊息 */
-        .inline-msg { font-size: 0.9em; font-weight: bold; display: block; margin-top: 5px; min-height: 24px; }
+        .inline-msg { font-size: 0.95em; font-weight: bold; display: block; margin-top: 8px; min-height: 20px; text-align: center; }
         .msg-error { color: var(--danger-color); }
         .msg-success { color: var(--accent-green); }
 
         /* 文章卡片 */
-        .post-header { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
-        .post-author-row { display: flex; align-items: center; gap: 12px; }
-        .post-author { font-size: 1.3rem; font-weight: bold; color: var(--text-dark); } 
+        .post-header { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+        .post-author-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+        .post-author { font-size: 1.2rem; font-weight: bold; color: var(--text-dark); } 
         .post-time { color: var(--text-muted); font-size: 0.85rem; }
-        .badges { display: flex; gap: 8px; }
-        .badge { background: var(--accent-green); color: #ffffff; padding: 4px 12px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; }
+        .badges { display: flex; gap: 8px; flex-wrap: wrap; }
+        .badge { background: var(--accent-green); color: #ffffff; padding: 4px 10px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; display: inline-block; white-space: nowrap; }
         .badge.job { background: var(--primary-yellow); color: #ffffff; }
-        .badge.type-tag { background: var(--slate-blue); color: #ffffff; border: none; } /* 鐵灰色標籤 */
-        .post-content { font-size: 1.1rem; white-space: pre-wrap; margin-bottom: 20px; color: var(--text-dark); }
+        .badge.type-tag { background: var(--slate-blue); color: #ffffff; border: none; } 
+        .post-content { font-size: 1.05rem; white-space: pre-wrap; margin-bottom: 20px; color: var(--text-dark); word-break: break-word; }
         
-        /* 互動與留言區 (採用鐵灰色與橘色結合) */
-        .interaction-bar { display: flex; gap: 10px; margin-top: 10px; border-top: 1px dashed var(--glass-border); padding-top: 20px; }
-        .btn-interact { background: transparent; color: var(--slate-blue); border: 1px solid var(--slate-blue); width: auto; padding: 8px 16px; font-size: 0.95rem; box-shadow: none; margin-bottom: 0; transition: all 0.2s; }
-        .btn-interact:hover { background: var(--slate-blue); color: #ffffff; border-color: var(--slate-blue); transform: none; }
+        /* 互動與留言區 - App 網格雙按鈕設計 */
+        .interaction-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; border-top: 1px dashed var(--glass-border); padding-top: 20px; }
+        .btn-interact { background: transparent; color: var(--slate-blue); border: 2px solid var(--glass-border); width: 100%; padding: 12px 10px; font-size: 0.95rem; box-shadow: none; margin-bottom: 0; transition: all 0.2s; border-radius: 10px; font-weight: bold; }
+        .btn-interact:hover { background: var(--input-bg); transform: none; }
         
         .btn-interact.active { background: var(--primary-yellow); color: #ffffff; border-color: var(--primary-yellow); }
         .btn-interact.active:hover { background: var(--primary-hover); color: #ffffff; border-color: var(--primary-hover); }
 
-        .comments-wrapper { margin-top: 20px; background: var(--input-bg); padding: 20px; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); }
-        .comment-item { background: var(--panel-bg); padding: 16px; border-radius: 8px; margin-bottom: 16px; border-left: 4px solid var(--primary-yellow); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .comment-text { font-size: 1rem; color: var(--text-dark); white-space: pre-wrap; word-break: break-word; }
-        .nested-replies { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--glass-border); padding-left: 10px; }
-        .nested-reply-item { margin-bottom: 10px; font-size: 0.95rem; color: var(--text-dark); padding-left: 15px; border-left: 2px solid var(--glass-border); white-space: pre-wrap; }
+        .comments-wrapper { margin-top: 20px; background: var(--input-bg); padding: 16px; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); }
+        .comment-item { background: var(--panel-bg); padding: 16px; border-radius: 10px; margin-bottom: 12px; border-left: 4px solid var(--primary-yellow); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .comment-text { font-size: 0.95rem; color: var(--text-dark); white-space: pre-wrap; word-break: break-word; }
+        .nested-replies { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--glass-border); padding-left: 8px; }
+        .nested-reply-item { margin-bottom: 12px; font-size: 0.9rem; color: var(--text-dark); padding-left: 12px; border-left: 2px solid var(--glass-border); white-space: pre-wrap; }
         
         .system-msg { text-align: center; color: var(--slate-blue); padding: 40px 20px; font-size: 1.1rem; font-weight: bold; }
-        .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 30px; }
-        .page-btn { background: var(--panel-bg); color: var(--slate-blue); border: 1px solid var(--glass-border); padding: 8px 16px; border-radius: 6px; cursor: pointer; width: auto; margin-bottom: 0; box-shadow: none; }
+        
+        .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 24px; flex-wrap: wrap; }
+        .page-btn { background: var(--panel-bg); color: var(--slate-blue); border: 1px solid var(--glass-border); padding: 10px 16px; border-radius: 8px; cursor: pointer; width: auto; margin-bottom: 0; box-shadow: none; font-weight: bold; }
         .page-btn.active { background: var(--primary-yellow); color: #ffffff; border-color: var(--primary-yellow); }
 
-        .lock-mask { background: var(--input-bg); padding: 20px; text-align: center; border-radius: 8px; color: var(--slate-blue); border: 1px dashed var(--glass-border); margin-top: 15px; font-weight: bold; }
+        .lock-mask { background: var(--input-bg); padding: 20px; text-align: center; border-radius: 10px; color: var(--slate-blue); border: 1px dashed var(--glass-border); margin-top: 15px; font-weight: bold; font-size: 0.95rem; }
 
-        @media (max-width: 600px) { 
-            #step-1, #step-2 div { flex-direction: column; align-items: stretch; }
-            #auth-email, #otp-code { max-width: 100% !important; }
-            #auth-section button { width: 100%; min-width: auto !important; }
-        }
+        /* 通用堆疊工具 */
+        .stack-group { display: flex; flex-direction: column; width: 100%; gap: 10px; }
+        .stack-group input, .stack-group button { margin-bottom: 0; }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div>
     <div class="header">
-        <h1>特洛伊敲碗解惑區</h1>
+        <h1>特洛伊論壇交流區</h1>
     </div>
 
     <div class="panel" id="auth-section">
         <h3 style="margin-top:0;">版規與通行證</h3>
-        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;">
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; text-align: justify;">
             歡迎來到敲碗解惑區！請先輸入 Email 獲取驗證碼。登入後系統將自動記錄您的信箱，即可參與發文、留言與同問互動。
             未登入者僅可瀏覽文章標題與內容。留言或送出後無法刪除，此機制為求留言之妥當性。敬請各位配合。
             祝大家交流愉快，都能收穫許多AI應用的心得與經驗。
         </p>
-        <p id="login-status" style="color: var(--primary-yellow); font-weight: bold; margin-bottom: 15px;">目前狀態：未登入</p>
+        <p id="login-status" style="color: var(--primary-yellow); font-weight: bold; margin-bottom: 15px; text-align: center;">目前狀態：未登入</p>
         
-        <div id="step-1" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;">
-            <input type="email" id="auth-email" class="input-box" placeholder="輸入 Email" style="flex: 2; max-width: 300px; margin-bottom: 0;">
-            <button onclick="requestOTP()" id="btn-otp" style="flex: 1; margin-bottom: 0; width: auto; min-width: 120px;">寄送驗證碼</button>
-            <span id="otp-msg" class="inline-msg" style="width: 100%; text-align: left;"></span>
+        <div id="step-1" class="stack-group">
+            <input type="email" id="auth-email" class="input-box" placeholder="輸入 Email">
+            <button onclick="requestOTP()" id="btn-otp">寄送驗證碼</button>
+            <span id="otp-msg" class="inline-msg"></span>
         </div>
         
         <div id="step-2" style="display: none; margin-top: 10px;">
-            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;">
-                <input type="text" id="otp-code" class="input-box" placeholder="輸入 6 位數驗證碼" style="flex: 2; max-width: 300px; margin-bottom: 0;">
-                <button onclick="verifyLogin()" id="btn-login" style="flex: 1; margin-bottom: 0; width: auto; min-width: 120px;">登入通行</button>
-                <button onclick="cancelLogin()" style="flex: 1; margin-bottom: 0; width: auto; min-width: 80px; background: #ffffff; color: var(--slate-blue); border: 1px solid var(--slate-blue);">返回</button>
+            <div class="stack-group">
+                <input type="text" id="otp-code" class="input-box" placeholder="輸入 6 位數驗證碼">
+                <button onclick="verifyLogin()" id="btn-login">登入通行</button>
+                <button onclick="cancelLogin()" class="btn-outline">返回</button>
             </div>
-            <span id="login-msg" class="inline-msg" style="width: 100%;"></span>
+            <span id="login-msg" class="inline-msg"></span>
         </div>
 
         <div id="logout-btn-container" style="display: none; margin-top: 25px; border-top: 1px dashed var(--glass-border); padding-top: 20px;">
-            <button onclick="logout()" style="background: var(--danger-color); width: auto; margin-bottom:0;">登出</button>
+            <button onclick="logout()" style="background: var(--danger-color); margin-bottom:0; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.25);">登出</button>
         </div>
     </div>
 
-    <input type="text" id="searchInput" class="search-box" placeholder="輸入關鍵字搜尋討論與問題..." oninput="filterPosts()" style="margin-bottom: 24px;">
+    <input type="text" id="searchInput" class="search-box" placeholder="輸入關鍵字搜尋討論與問題..." oninput="filterPosts()">
 
     <div class="filter-section" id="filterSection" style="display: none;">
         <div class="filter-title">討論類型</div>
         <div class="category-nav" id="type-container"></div>
         <div class="filter-title" style="margin-top: 10px;">發佈日期</div>
-        <div style="display: flex; gap: 10px; align-items: center;">
-            <input type="date" id="datePicker" class="input-box" style="width: auto; margin: 0;" onchange="handleDateChange()">
-            <button onclick="clearDateFilter()" class="cat-btn" style="background: var(--bg-pure);">清除</button>
+        <div class="stack-group" style="gap: 8px;">
+            <input type="date" id="datePicker" class="input-box" onchange="handleDateChange()">
+            <button onclick="clearDateFilter()" class="btn-outline">清除日期條件</button>
         </div>
     </div>
 
@@ -382,19 +409,19 @@
             
             const replyActionHtml = c.isOptimistic 
                 ? `` 
-                : `<button class="btn-interact" style="padding:4px 8px; font-size:0.85rem;" onclick="toggleElement('reply-form-${post.postID}-${c.colIndex}')">回覆此樓</button>`;
+                : `<button class="btn-interact" style="padding:6px 10px; font-size:0.85rem;" onclick="toggleElement('reply-form-${post.postID}-${c.colIndex}')">回覆此樓</button>`;
 
             const itemHtml = `
                 <div class="comment-item">
                     <div class="comment-text">${formatCommentDisplay(c.main)}</div>
-                    <div style="display:flex; gap:10px; margin-top:8px;">
-                        ${c.replies && c.replies.length > 0 ? `<button class="btn-interact" style="padding:4px 8px; font-size:0.85rem;" onclick="toggleElement('replies-${post.postID}-${c.colIndex}')">展開回覆 (${c.replies.length})</button>` : ''}
+                    <div style="display:flex; gap:8px; margin-top:10px;">
+                        ${c.replies && c.replies.length > 0 ? `<button class="btn-interact" style="padding:6px 10px; font-size:0.85rem;" onclick="toggleElement('replies-${post.postID}-${c.colIndex}')">展開回覆 (${c.replies.length})</button>` : ''}
                         ${replyActionHtml}
                     </div>
                     <div id="replies-${post.postID}-${c.colIndex}" class="nested-replies" style="display:${c.showReplies ? 'block' : 'none'};">${repliesHtml}</div>
-                    <div id="reply-form-${post.postID}-${c.colIndex}" style="display:none; margin-top:10px;">
-                        <textarea id="content_${post.postID}_${c.colIndex}" class="input-box" placeholder="回覆內容..." style="min-height:50px; margin-bottom:5px;"></textarea>
-                        <button onclick="submitInteraction('${post.postID}', 'reply', ${c.colIndex}, this)" style="width:auto; padding:8px 16px;">送出回覆</button>
+                    <div id="reply-form-${post.postID}-${c.colIndex}" style="display:none; margin-top:12px;">
+                        <textarea id="content_${post.postID}_${c.colIndex}" class="input-box" placeholder="回覆內容..." style="min-height:50px; margin-bottom:8px;"></textarea>
+                        <button onclick="submitInteraction('${post.postID}', 'reply', ${c.colIndex}, this)">送出回覆</button>
                     </div>
                 </div>`;
 
@@ -411,7 +438,7 @@
         // 🌟 如果有隱藏的留言，將「載入較舊留言」按鈕放在最上方
         if (hiddenHtml !== '') {
             finalHtml += `
-                <button class="btn-interact btn-load-more" id="btn-load-more-${post.postID}" style="width:100%; justify-content:center; margin-bottom:15px;" onclick="document.getElementById('hidden-comments-${post.postID}').style.display='block'; this.style.display='none';">
+                <button class="btn-interact btn-load-more" id="btn-load-more-${post.postID}" style="margin-bottom:16px;" onclick="document.getElementById('hidden-comments-${post.postID}').style.display='block'; this.style.display='none';">
                     載入較舊的留言 (隱藏 ${hiddenCount} 則紀錄)
                 </button>
                 <div id="hidden-comments-${post.postID}" class="hidden-comments-wrapper" style="display:none; margin-bottom:15px;">${hiddenHtml}</div>
@@ -446,7 +473,7 @@
             } else {
                 const hasP1 = post.plusOnes && post.plusOnes.includes(currentUserEmail);
                 const p1BtnClass = hasP1 ? "btn-interact active" : "btn-interact";
-                const p1BtnText = hasP1 ? `已 +1 (${p1Count})` : `+1 (${p1Count})`;
+                const p1BtnText = hasP1 ? `已 +1 (${p1Count})` : `同問 +1 (${p1Count})`;
 
                 interactionHTML = `
                     <div class="interaction-bar">
@@ -459,8 +486,8 @@
                         </div>
                         <div style="margin-top:20px; border-top:2px solid var(--glass-border); padding-top:16px;">
                             <strong style="color:var(--slate-blue); display:block; margin-bottom:10px;">新增主留言</strong>
-                            <textarea id="content_${post.postID}_main" class="input-box" placeholder="寫下您的看法..." style="min-height:60px; margin-bottom:5px; resize:vertical;"></textarea>
-                            <button onclick="submitInteraction('${post.postID}', 'main', null, this)" style="width:auto;">送出留言</button>
+                            <textarea id="content_${post.postID}_main" class="input-box" placeholder="寫下您的看法..." style="min-height:60px; margin-bottom:8px;"></textarea>
+                            <button onclick="submitInteraction('${post.postID}', 'main', null, this)">送出留言</button>
                         </div>
                     </div>`;
             }
@@ -468,7 +495,10 @@
             container.innerHTML += `
                 <div class="panel">
                     <div class="post-header">
-                        <div class="post-author-row"><span class="post-author">${escapeHtml(post.nickname)}</span><span class="post-time">${post.timestamp}</span></div>
+                        <div class="post-author-row">
+                            <span class="post-author">${escapeHtml(post.nickname)}</span>
+                            <span class="post-time">${post.timestamp}</span>
+                        </div>
                         <div class="badges">
                             <span class="badge type-tag">${post.postType}</span>
                             ${post.jobTitle && post.jobTitle !== '不透露' ? `<span class="badge job">${escapeHtml(post.jobTitle)}</span>` : ''}
@@ -507,7 +537,7 @@
             }
             
             btn.className = !hasP1 ? "btn-interact active" : "btn-interact";
-            btn.innerText = !hasP1 ? `已 +1 (${post.plusOnes.length})` : `+1 (${post.plusOnes.length})`;
+            btn.innerText = !hasP1 ? `已 +1 (${post.plusOnes.length})` : `同問 +1 (${post.plusOnes.length})`;
 
             fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'addPlusOne', payload: { postID, email: currentUserEmail } }) })
             .catch(e => console.error("同步失敗", e));
